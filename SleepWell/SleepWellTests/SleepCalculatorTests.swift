@@ -259,4 +259,13 @@ struct SleepCalculatorNapModeTests {
         let recoveryNap = try #require(results.first(where: { $0.totalSleepMinutes == 90 }))
         #expect(recoveryNap.totalSleepFormatted == "1h 30m")
     }
+
+    @Test("custom latency shifts nap wake times correctly")
+    func customLatencyShiftsNapWakeTimes() throws {
+        // 30min latency + 20min nap = 50 minutes after napTime
+        let results = SleepCalculator.calculateNapTimes(napTime: napTime, fallAsleepMinutes: 30)
+        let powerNap = try #require(results.first(where: { $0.totalSleepMinutes == 20 }))
+        let expected = napTime.addingTimeInterval(50 * 60)
+        #expect(powerNap.bedtime == expected)
+    }
 }

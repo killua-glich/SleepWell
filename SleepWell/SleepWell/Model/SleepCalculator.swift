@@ -36,6 +36,7 @@ struct SleepCalculator {
     static func calculateNapTimes(napTime: Date, fallAsleepMinutes: Int) -> [BedtimeOption] {
         let latency = TimeInterval(fallAsleepMinutes) * 60
         let sleepOnset = napTime + latency
+        // BedtimeOption.bedtime holds the nap alarm (wake-up time) in this mode
         return [
             BedtimeOption(
                 bedtime: sleepOnset + 20 * 60,
