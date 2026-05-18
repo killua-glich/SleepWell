@@ -2,6 +2,7 @@ import SwiftUI
 
 struct WakeTimePickerView: View {
     @Environment(SleepViewModel.self) private var viewModel
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ZStack {
@@ -44,6 +45,7 @@ struct WakeTimePickerView: View {
 
                 Button {
                     viewModel.calculate()
+                    dismiss()
                 } label: {
                     Text("Calculate Bedtimes")
                         .font(.system(size: 17, weight: .semibold))
