@@ -4,10 +4,22 @@ struct BedtimeResultsView: View {
     @Environment(SleepViewModel.self) private var viewModel
     @Environment(\.openURL) private var openURL
 
-    private var wakeTimeLabel: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a"
-        return formatter.string(from: viewModel.wakeTime).uppercased()
+    private var headerEyebrow: String {
+        switch viewModel.mode {
+        case .wakeUp:
+            let formatter = DateFormatter()
+            formatter.dateFormat = "h:mm a"
+            return "WAKE UP AT \(formatter.string(from: viewModel.wakeTime).uppercased())"
+        case .sleepNow:
+            return "SLEEPING NOW"
+        }
+    }
+
+    private var headerTitle: String {
+        switch viewModel.mode {
+        case .wakeUp: return "Go to bed at…"
+        case .sleepNow: return "Wake up at…"
+        }
     }
 
     private var showDialog: Binding<Bool> {
@@ -31,12 +43,12 @@ struct BedtimeResultsView: View {
             VStack(spacing: 0) {
                 // Header
                 VStack(spacing: 4) {
-                    Text("WAKE UP AT \(wakeTimeLabel)")
+                    Text(headerEyebrow)
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(.white.opacity(0.4))
                         .tracking(1.5)
 
-                    Text("Go to bed at…")
+                    Text(headerTitle)
                         .font(.system(size: 22, weight: .bold))
                         .foregroundStyle(.white)
                 }
