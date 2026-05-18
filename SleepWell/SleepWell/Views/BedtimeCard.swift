@@ -137,6 +137,15 @@ struct BedtimeCard: View {
         VStack(spacing: 12) {
             BedtimeCard(
                 option: BedtimeOption(
+                    bedtime: Date(),
+                    totalSleepMinutes: 450,
+                    cycles: 5,
+                    isRecommended: true
+                ),
+                onTap: {}
+            )
+            BedtimeCard(
+                option: BedtimeOption(
                     bedtime: Date().addingTimeInterval(20 * 60),
                     totalSleepMinutes: 20,
                     cycles: 0,
