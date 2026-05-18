@@ -84,8 +84,12 @@ struct SleepCalculatorReverseModeTests {
 
     let sleepTime: Date = {
         var c = DateComponents()
-        c.year = 2026; c.month = 1; c.day = 1
-        c.hour = 23; c.minute = 0; c.second = 0
+        c.year = 2026
+        c.month = 1
+        c.day = 1
+        c.hour = 23
+        c.minute = 0
+        c.second = 0
         return Calendar.current.date(from: c)!
     }()
 
@@ -110,19 +114,17 @@ struct SleepCalculatorReverseModeTests {
     }
 
     @Test("6-cycle wake time is 9h14m after sleep with 14min latency")
-    func sixCycleWakeTime() {
-        // 14min latency + 6×90min = 554 minutes after sleepTime
+    func sixCycleWakeTime() throws {
         let results = SleepCalculator.calculateWakeTimes(sleepTime: sleepTime, fallAsleepMinutes: 14)
-        let sixCycle = results.first(where: { $0.cycles == 6 })!
+        let sixCycle = try #require(results.first(where: { $0.cycles == 6 }))
         let expected = sleepTime.addingTimeInterval(554 * 60)
         #expect(sixCycle.bedtime == expected)
     }
 
     @Test("5-cycle wake time is 7h44m after sleep with 14min latency")
-    func fiveCycleWakeTime() {
-        // 14min latency + 5×90min = 464 minutes after sleepTime
+    func fiveCycleWakeTime() throws {
         let results = SleepCalculator.calculateWakeTimes(sleepTime: sleepTime, fallAsleepMinutes: 14)
-        let fiveCycle = results.first(where: { $0.cycles == 5 })!
+        let fiveCycle = try #require(results.first(where: { $0.cycles == 5 }))
         let expected = sleepTime.addingTimeInterval(464 * 60)
         #expect(fiveCycle.bedtime == expected)
     }
@@ -142,5 +144,12 @@ struct SleepCalculatorReverseModeTests {
         let sixCycle = results.first(where: { $0.cycles == 6 })!
         let expected = sleepTime.addingTimeInterval(570 * 60)
         #expect(sixCycle.bedtime == expected)
+    }
+
+    @Test("totalSleepFormatted for 7.5h")
+    func totalSleepFormatted() throws {
+        let results = SleepCalculator.calculateWakeTimes(sleepTime: sleepTime, fallAsleepMinutes: 14)
+        let fiveCycle = try #require(results.first(where: { $0.cycles == 5 }))
+        #expect(fiveCycle.totalSleepFormatted == "7h 30m")
     }
 }

@@ -23,6 +23,7 @@ struct SleepCalculator {
         return [6, 5, 4, 3].map { cycles in
             let sleepDuration = TimeInterval(cycles) * cycleDuration
             let wakeTime = sleepOnset + sleepDuration
+            // In reverse mode, BedtimeOption.bedtime holds the wake-up time
             return BedtimeOption(
                 bedtime: wakeTime,
                 totalSleepMinutes: cycles * 90,
