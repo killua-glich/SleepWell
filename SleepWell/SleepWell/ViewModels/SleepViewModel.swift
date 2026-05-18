@@ -3,7 +3,7 @@ import Observation
 import SwiftUI
 
 enum SleepMode {
-    case wakeUp, sleepNow
+    case wakeUp, sleepNow, nap
 }
 
 @Observable
@@ -23,12 +23,19 @@ final class SleepViewModel {
             bedtimes = SleepCalculator.calculate(wakeTime: wakeTime, fallAsleepMinutes: fallAsleepMinutes)
         case .sleepNow:
             bedtimes = SleepCalculator.calculateWakeTimes(sleepTime: Date(), fallAsleepMinutes: fallAsleepMinutes)
+        case .nap:
+            bedtimes = SleepCalculator.calculateNapTimes(napTime: Date(), fallAsleepMinutes: fallAsleepMinutes)
         }
         showResults = true
     }
 
     func calculateSleepNow() {
         mode = .sleepNow
+        calculate()
+    }
+
+    func calculateNapNow() {
+        mode = .nap
         calculate()
     }
 
