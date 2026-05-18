@@ -77,6 +77,30 @@ struct SleepCalculatorTests {
         let expectedBedtime = wakeTime.addingTimeInterval(-570 * 60)
         #expect(sixCycle.bedtime == expectedBedtime)
     }
+
+    @Test("totalSleepFormatted for 20 minutes returns '20m'")
+    func totalSleepFormattedSubHour() {
+        let option = BedtimeOption(
+            bedtime: Date(),
+            totalSleepMinutes: 20,
+            cycles: 0,
+            isRecommended: false,
+            napLabel: "Power Nap"
+        )
+        #expect(option.totalSleepFormatted == "20m")
+    }
+
+    @Test("totalSleepFormatted for 90 minutes returns '1h 30m'")
+    func totalSleepFormattedNinetyMin() {
+        let option = BedtimeOption(
+            bedtime: Date(),
+            totalSleepMinutes: 90,
+            cycles: 1,
+            isRecommended: false,
+            napLabel: "Recovery Nap"
+        )
+        #expect(option.totalSleepFormatted == "1h 30m")
+    }
 }
 
 @Suite("SleepCalculator reverse mode")
