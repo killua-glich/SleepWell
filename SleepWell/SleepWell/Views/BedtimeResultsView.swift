@@ -16,6 +16,8 @@ struct BedtimeResultsView: View {
             return "WAKE UP AT \(Self.timeFormatter.string(from: viewModel.wakeTime).uppercased())"
         case .sleepNow:
             return "SLEEPING NOW"
+        case .nap:
+            return "NAPPING NOW"
         }
     }
 
@@ -23,6 +25,7 @@ struct BedtimeResultsView: View {
         switch viewModel.mode {
         case .wakeUp: return "Go to bed at…"
         case .sleepNow: return "Wake up at…"
+        case .nap: return "Wake up at…"
         }
     }
 
