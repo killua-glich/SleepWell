@@ -1,13 +1,13 @@
 import Foundation
 
 struct SleepCalculator {
-    static let cycleDuration: TimeInterval = 90 * 60      // 90 min in seconds
-    static let fallAsleepLatency: TimeInterval = 14 * 60  // 14 min in seconds
+    static let cycleDuration: TimeInterval = 90 * 60
 
-    static func calculate(wakeTime: Date) -> [BedtimeOption] {
-        [6, 5, 4, 3].map { cycles in
+    static func calculate(wakeTime: Date, fallAsleepMinutes: Int) -> [BedtimeOption] {
+        let latency = TimeInterval(fallAsleepMinutes) * 60
+        return [6, 5, 4, 3].map { cycles in
             let sleepDuration = TimeInterval(cycles) * cycleDuration
-            let bedtime = wakeTime - sleepDuration - fallAsleepLatency
+            let bedtime = wakeTime - sleepDuration - latency
             return BedtimeOption(
                 bedtime: bedtime,
                 totalSleepMinutes: cycles * 90,

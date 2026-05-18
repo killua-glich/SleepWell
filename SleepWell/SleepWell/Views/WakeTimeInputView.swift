@@ -29,7 +29,9 @@ struct WakeTimeInputView: View {
                     selection: $vm.wakeTime,
                     displayedComponents: .hourAndMinute
                 )
+#if os(iOS)
                 .datePickerStyle(.wheel)
+#endif
                 .labelsHidden()
                 .colorScheme(.dark)
                 .padding(.horizontal, 24)
@@ -80,7 +82,9 @@ struct WakeTimeInputView: View {
             }
         }
         .navigationTitle("")
+#if os(iOS)
         .toolbarBackground(.hidden, for: .navigationBar)
+#endif
     }
 
     private var backgroundView: some View {

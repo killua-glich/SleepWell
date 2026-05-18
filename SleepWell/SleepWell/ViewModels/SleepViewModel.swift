@@ -4,12 +4,13 @@ import Observation
 @Observable
 final class SleepViewModel {
     var wakeTime: Date = defaultWakeTime()
+    var fallAsleepMinutes: Int = 14
     var bedtimes: [BedtimeOption] = []
     var showResults: Bool = false
     var selectedOption: BedtimeOption? = nil
 
     func calculate() {
-        bedtimes = SleepCalculator.calculate(wakeTime: wakeTime)
+        bedtimes = SleepCalculator.calculate(wakeTime: wakeTime, fallAsleepMinutes: fallAsleepMinutes)
         showResults = true
     }
 
