@@ -81,6 +81,16 @@ struct WakeTimeInputView: View {
         }
         .navigationTitle("")
         .toolbarBackground(.hidden, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    SettingsView()
+                } label: {
+                    Image(systemName: "gearshape")
+                        .foregroundStyle(.white.opacity(0.7))
+                }
+            }
+        }
     }
 
     private var backgroundView: some View {
