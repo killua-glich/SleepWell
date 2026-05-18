@@ -78,3 +78,69 @@ struct SleepCalculatorTests {
         #expect(sixCycle.bedtime == expectedBedtime)
     }
 }
+
+@Suite("SleepCalculator reverse mode")
+struct SleepCalculatorReverseModeTests {
+
+    let sleepTime: Date = {
+        var c = DateComponents()
+        c.year = 2026; c.month = 1; c.day = 1
+        c.hour = 23; c.minute = 0; c.second = 0
+        return Calendar.current.date(from: c)!
+    }()
+
+    @Test("returns 4 options")
+    func returnsExactlyFourOptions() {
+        let results = SleepCalculator.calculateWakeTimes(sleepTime: sleepTime, fallAsleepMinutes: 14)
+        #expect(results.count == 4)
+    }
+
+    @Test("sorted 6 cycles first")
+    func sortedByDescendingCycles() {
+        let results = SleepCalculator.calculateWakeTimes(sleepTime: sleepTime, fallAsleepMinutes: 14)
+        #expect(results.map(\.cycles) == [6, 5, 4, 3])
+    }
+
+    @Test("only 5-cycle option is recommended")
+    func onlyFiveCyclesRecommended() {
+        let results = SleepCalculator.calculateWakeTimes(sleepTime: sleepTime, fallAsleepMinutes: 14)
+        let recommended = results.filter(\.isRecommended)
+        #expect(recommended.count == 1)
+        #expect(recommended.first?.cycles == 5)
+    }
+
+    @Test("6-cycle wake time is 9h14m after sleep with 14min latency")
+    func sixCycleWakeTime() {
+        // 14min latency + 6×90min = 554 minutes after sleepTime
+        let results = SleepCalculator.calculateWakeTimes(sleepTime: sleepTime, fallAsleepMinutes: 14)
+        let sixCycle = results.first(where: { $0.cycles == 6 })!
+        let expected = sleepTime.addingTimeInterval(554 * 60)
+        #expect(sixCycle.bedtime == expected)
+    }
+
+    @Test("5-cycle wake time is 7h44m after sleep with 14min latency")
+    func fiveCycleWakeTime() {
+        // 14min latency + 5×90min = 464 minutes after sleepTime
+        let results = SleepCalculator.calculateWakeTimes(sleepTime: sleepTime, fallAsleepMinutes: 14)
+        let fiveCycle = results.first(where: { $0.cycles == 5 })!
+        let expected = sleepTime.addingTimeInterval(464 * 60)
+        #expect(fiveCycle.bedtime == expected)
+    }
+
+    @Test("totalSleepMinutes equals cycles × 90")
+    func totalSleepMinutes() {
+        let results = SleepCalculator.calculateWakeTimes(sleepTime: sleepTime, fallAsleepMinutes: 14)
+        for option in results {
+            #expect(option.totalSleepMinutes == option.cycles * 90)
+        }
+    }
+
+    @Test("custom latency shifts wake times correctly")
+    func customLatencyShiftsWakeTimes() {
+        // 30min latency + 6×90min = 570 minutes after sleepTime
+        let results = SleepCalculator.calculateWakeTimes(sleepTime: sleepTime, fallAsleepMinutes: 30)
+        let sixCycle = results.first(where: { $0.cycles == 6 })!
+        let expected = sleepTime.addingTimeInterval(570 * 60)
+        #expect(sixCycle.bedtime == expected)
+    }
+}

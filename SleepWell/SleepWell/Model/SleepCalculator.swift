@@ -16,4 +16,19 @@ struct SleepCalculator {
             )
         }
     }
+
+    static func calculateWakeTimes(sleepTime: Date, fallAsleepMinutes: Int) -> [BedtimeOption] {
+        let latency = TimeInterval(fallAsleepMinutes) * 60
+        let sleepOnset = sleepTime + latency
+        return [6, 5, 4, 3].map { cycles in
+            let sleepDuration = TimeInterval(cycles) * cycleDuration
+            let wakeTime = sleepOnset + sleepDuration
+            return BedtimeOption(
+                bedtime: wakeTime,
+                totalSleepMinutes: cycles * 90,
+                cycles: cycles,
+                isRecommended: cycles == 5
+            )
+        }
+    }
 }
