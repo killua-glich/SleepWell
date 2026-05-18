@@ -3,10 +3,11 @@
 ## Ideas
 
 - [x] Custom fall-asleep time — user sets how long it takes them to fall asleep (replaces hardcoded default)
-- [x] Reverse mode — "I'm going to sleep now, when should I wake up?" calculates optimal alarm times from current time
+- [x] Reverse mode / Sleep Now — "I'm going to sleep now, when should I wake up?" calculates optimal alarm times from current time
+- [x] Take a Nap mode — power nap (20 min) and recovery nap (90 min) options calculated from current time
 - [ ] Default wake-up time — user sets a persistent wake-up target used for recommendations
 - [ ] Wake-up schedule — separate defaults for weekdays vs weekends
 - [ ] Widget — home screen widget showing recommended sleep time based on default wake-up schedule
 
 ---
-_Last updated: 2026-05-18_ (custom fall-asleep time shipped)
+_Last updated: 2026-05-18_ (nap mode shipped: power nap + recovery nap options)
