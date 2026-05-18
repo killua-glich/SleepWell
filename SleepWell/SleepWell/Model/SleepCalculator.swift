@@ -32,4 +32,25 @@ struct SleepCalculator {
             )
         }
     }
+
+    static func calculateNapTimes(napTime: Date, fallAsleepMinutes: Int) -> [BedtimeOption] {
+        let latency = TimeInterval(fallAsleepMinutes) * 60
+        let sleepOnset = napTime + latency
+        return [
+            BedtimeOption(
+                bedtime: sleepOnset + 20 * 60,
+                totalSleepMinutes: 20,
+                cycles: 0,
+                isRecommended: false,
+                napLabel: "Refreshing"
+            ),
+            BedtimeOption(
+                bedtime: sleepOnset + 90 * 60,
+                totalSleepMinutes: 90,
+                cycles: 1,
+                isRecommended: false,
+                napLabel: "Deep Rest"
+            )
+        ]
+    }
 }
