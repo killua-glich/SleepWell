@@ -43,6 +43,17 @@ struct WakeTimeInputView: View {
                         )
                     }
                     .buttonStyle(.plain)
+
+                    Button {
+                        viewModel.calculateNapNow()
+                    } label: {
+                        modeCard(
+                            title: "Take a Nap",
+                            subtitle: "Power nap or full recovery",
+                            icon: "bed.double.fill"
+                        )
+                    }
+                    .buttonStyle(.plain)
                 }
                 .padding(.horizontal, 24)
 
