@@ -46,8 +46,11 @@ struct BedtimeCard: View {
 
                 Spacer()
 
-                // Right: cycle dots + optional badge
-                VStack(alignment: .trailing, spacing: 6) {
+                // Right: cycle count + dots
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("\(option.cycles) cycles")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(.white.opacity(0.45))
                     HStack(spacing: 4) {
                         ForEach(0..<option.cycles, id: \.self) { _ in
                             Circle()
@@ -59,22 +62,11 @@ struct BedtimeCard: View {
                                 )
                         }
                     }
-
-                    if option.isRecommended {
-                        Text("RECOMMENDED")
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundStyle(Color.accent)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 3)
-                            .overlay(
-                                Capsule()
-                                    .stroke(Color.accent.opacity(0.8), lineWidth: 1.5)
-                            )
-                    }
                 }
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 14)
+            .padding(.top, option.isRecommended ? 30 : 14)
+            .padding(.bottom, 14)
             .background {
                 if option.isRecommended {
                     RoundedRectangle(cornerRadius: 16)
@@ -94,6 +86,21 @@ struct BedtimeCard: View {
                             RoundedRectangle(cornerRadius: 16)
                                 .stroke(.white.opacity(0.1), lineWidth: 1)
                         )
+                }
+            }
+            .overlay(alignment: .topTrailing) {
+                if option.isRecommended {
+                    Text("RECOMMENDED")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(Color.accent)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .overlay(
+                            Capsule()
+                                .stroke(Color.accent.opacity(0.8), lineWidth: 1.5)
+                        )
+                        .padding(.trailing, 12)
+                        .padding(.top, 8)
                 }
             }
         }
