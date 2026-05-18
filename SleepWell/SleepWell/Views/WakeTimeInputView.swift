@@ -10,70 +10,40 @@ struct WakeTimeInputView: View {
             VStack(spacing: 32) {
                 Spacer()
 
-                // Title
                 VStack(spacing: 6) {
                     Text("SleepWell")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(.white.opacity(0.4))
                         .tracking(2)
 
-                    Text("When do you wake up?")
+                    Text("How can I help?")
                         .font(.system(size: 26, weight: .bold))
                         .foregroundStyle(.white)
                 }
 
-                // Glass picker container
-                @Bindable var vm = viewModel
-                DatePicker(
-                    "",
-                    selection: $vm.wakeTime,
-                    displayedComponents: .hourAndMinute
-                )
-                .datePickerStyle(.wheel)
-                .labelsHidden()
-                .colorScheme(.dark)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 20)
-                .background {
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(.ultraThinMaterial)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(.white.opacity(0.12), lineWidth: 1)
+                VStack(spacing: 16) {
+                    Button {
+                        viewModel.calculateSleepNow()
+                    } label: {
+                        modeCard(
+                            title: "Sleep Now",
+                            subtitle: "Show me the best times to wake up",
+                            icon: "moon.fill"
                         )
-                }
-                .padding(.horizontal, 24)
+                    }
+                    .buttonStyle(.plain)
 
-                // Calculate button
-                Button {
-                    viewModel.calculate()
-                } label: {
-                    Text("Calculate Bedtimes")
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background {
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(Color.accent.opacity(0.9))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .fill(
-                                            LinearGradient(
-                                                colors: [.white.opacity(0.15), .clear],
-                                                startPoint: .top,
-                                                endPoint: .center
-                                            )
-                                        )
-                                )
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .stroke(.white.opacity(0.2), lineWidth: 1)
-                                )
-                                .shadow(color: Color.accent.opacity(0.4), radius: 12, y: 4)
-                        }
+                    NavigationLink {
+                        WakeTimePickerView()
+                    } label: {
+                        modeCard(
+                            title: "Wake Up At…",
+                            subtitle: "Tell me when to go to bed",
+                            icon: "alarm"
+                        )
+                    }
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
                 .padding(.horizontal, 24)
 
                 Spacer()
@@ -93,6 +63,40 @@ struct WakeTimeInputView: View {
         }
     }
 
+    @ViewBuilder
+    private func modeCard(title: String, subtitle: String, icon: String) -> some View {
+        HStack(spacing: 16) {
+            Image(systemName: icon)
+                .font(.system(size: 24))
+                .foregroundStyle(Color.accent)
+                .frame(width: 36)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(.white)
+                Text(subtitle)
+                    .font(.system(size: 13))
+                    .foregroundStyle(.white.opacity(0.5))
+            }
+
+            Spacer()
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(.white.opacity(0.3))
+        }
+        .padding(20)
+        .background {
+            RoundedRectangle(cornerRadius: 20)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(.white.opacity(0.12), lineWidth: 1)
+                )
+        }
+    }
+
     private var backgroundView: some View {
         ZStack {
             LinearGradient(
@@ -101,14 +105,13 @@ struct WakeTimeInputView: View {
                 endPoint: .bottom
             )
 
-            // Ambient glow behind picker
             RadialGradient(
                 colors: [Color.accent.opacity(0.18), .clear],
                 center: .center,
                 startRadius: 0,
-                endRadius: 180
+                endRadius: 220
             )
-            .frame(width: 300, height: 300)
+            .frame(width: 360, height: 360)
         }
         .ignoresSafeArea()
     }
