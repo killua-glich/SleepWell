@@ -26,7 +26,7 @@ struct BedtimeOption: Identifiable {
         let hours = totalSleepMinutes / 60
         let minutes = totalSleepMinutes % 60
         if hours == 0 { return "\(minutes)m" }
-        if minutes == 0 { return "\(hours) hrs" }
+        if minutes == 0 { return "\(hours)h" }
         return "\(hours)h \(minutes)m"
     }
 }

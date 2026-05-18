@@ -88,6 +88,7 @@ struct SleepCalculatorTests {
             napLabel: "Power Nap"
         )
         #expect(option.totalSleepFormatted == "20m")
+        #expect(option.napLabel == "Power Nap")
     }
 
     @Test("totalSleepFormatted for 90 minutes returns '1h 30m'")
@@ -100,6 +101,17 @@ struct SleepCalculatorTests {
             napLabel: "Recovery Nap"
         )
         #expect(option.totalSleepFormatted == "1h 30m")
+    }
+
+    @Test("totalSleepFormatted for 360 minutes returns '6h'")
+    func totalSleepFormattedExactHours() {
+        let option = BedtimeOption(
+            bedtime: Date(),
+            totalSleepMinutes: 360,
+            cycles: 4,
+            isRecommended: false
+        )
+        #expect(option.totalSleepFormatted == "6h")
     }
 }
 
