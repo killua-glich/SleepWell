@@ -4,12 +4,16 @@ struct BedtimeResultsView: View {
     @Environment(SleepViewModel.self) private var viewModel
     @Environment(\.openURL) private var openURL
 
+    private static let timeFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "h:mm a"
+        return f
+    }()
+
     private var headerEyebrow: String {
         switch viewModel.mode {
         case .wakeUp:
-            let formatter = DateFormatter()
-            formatter.dateFormat = "h:mm a"
-            return "WAKE UP AT \(formatter.string(from: viewModel.wakeTime).uppercased())"
+            return "WAKE UP AT \(Self.timeFormatter.string(from: viewModel.wakeTime).uppercased())"
         case .sleepNow:
             return "SLEEPING NOW"
         }
@@ -31,9 +35,7 @@ struct BedtimeResultsView: View {
 
     private var dialogTitle: String {
         guard let option = viewModel.selectedOption else { return "" }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a"
-        return "Set alarm for \(formatter.string(from: option.bedtime))?"
+        return "Set alarm for \(Self.timeFormatter.string(from: option.bedtime))?"
     }
 
     var body: some View {
