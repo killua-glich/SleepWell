@@ -59,9 +59,7 @@ struct BedtimeResultsView: View {
         }
         .navigationBarBackButtonHidden(false)
         .navigationTitle("")
-#if os(iOS)
         .toolbarBackground(.hidden, for: .navigationBar)
-#endif
         .confirmationDialog(
             dialogTitle,
             isPresented: showDialog,
