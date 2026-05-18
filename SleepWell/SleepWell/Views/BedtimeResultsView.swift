@@ -98,15 +98,16 @@ struct BedtimeResultsView: View {
 }
 
 #Preview {
-    let vm = SleepViewModel()
-    vm.wakeTime = {
-        var c = DateComponents()
-        c.hour = 8; c.minute = 30
-        return Calendar.current.date(from: c) ?? Date()
-    }()
-    vm.calculate()
     NavigationStack {
         BedtimeResultsView()
-            .environment(vm)
+            .environment({
+                let vm = SleepViewModel()
+                var c = DateComponents()
+                c.hour = 8
+                c.minute = 30
+                vm.wakeTime = Calendar.current.date(from: c) ?? Date()
+                vm.calculate()
+                return vm
+            }())
     }
 }
