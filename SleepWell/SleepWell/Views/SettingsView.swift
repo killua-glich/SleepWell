@@ -9,28 +9,74 @@ struct SettingsView: View {
         ZStack {
             backgroundView
 
-            VStack(spacing: 32) {
-                Spacer()
+            ScrollView {
+                VStack(spacing: 32) {
+                    Spacer().frame(height: 16)
 
-                VStack(spacing: 6) {
-                    Text("Settings")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.4))
-                        .tracking(2)
-
-                    Text("How long to fall asleep?")
-                        .font(.system(size: 26, weight: .bold))
-                        .foregroundStyle(.white)
-                }
-
-                @Bindable var vm = viewModel
-                Picker("Fall asleep time", selection: $vm.fallAsleepMinutes) {
-                    ForEach(minuteRange, id: \.self) { minute in
-                        Text("\(minute) min").tag(minute)
+                    VStack(spacing: 6) {
+                        Text("Settings")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(.white.opacity(0.4))
+                            .tracking(2)
                     }
+
+                    // MARK: - Fall asleep time
+                    settingSection(label: "How long to fall asleep?", caption: "Used to calculate your ideal bedtime") {
+                        @Bindable var vm = viewModel
+                        Picker("Fall asleep time", selection: $vm.fallAsleepMinutes) {
+                            ForEach(minuteRange, id: \.self) { minute in
+                                Text("\(minute) min").tag(minute)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .colorScheme(.dark)
+                    }
+
+                    // MARK: - Default wake-up time
+                    settingSection(label: "Default wake-up time", caption: "Pre-fills the Wake Up At picker") {
+                        @Bindable var vm = viewModel
+                        DatePicker(
+                            "",
+                            selection: defaultWakeBinding(vm: viewModel),
+                            displayedComponents: .hourAndMinute
+                        )
+                        .datePickerStyle(.wheel)
+                        .labelsHidden()
+                        .colorScheme(.dark)
+                    }
+
+                    Spacer().frame(height: 16)
                 }
-                .pickerStyle(.wheel)
-                .colorScheme(.dark)
+            }
+        }
+        .navigationTitle("")
+        .toolbarBackground(.hidden, for: .navigationBar)
+    }
+
+    // Converts the two AppStorage ints to a Binding<Date> for the DatePicker.
+    private func defaultWakeBinding(vm: SleepViewModel) -> Binding<Date> {
+        Binding(
+            get: { vm.defaultWakeDate },
+            set: { newDate in
+                let components = Calendar.current.dateComponents([.hour, .minute], from: newDate)
+                vm.defaultWakeHour = components.hour ?? 7
+                vm.defaultWakeMinute = components.minute ?? 0
+            }
+        )
+    }
+
+    @ViewBuilder
+    private func settingSection<Content: View>(
+        label: String,
+        caption: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(spacing: 12) {
+            Text(label)
+                .font(.system(size: 26, weight: .bold))
+                .foregroundStyle(.white)
+
+            content()
                 .padding(.horizontal, 24)
                 .padding(.vertical, 20)
                 .background {
@@ -43,15 +89,10 @@ struct SettingsView: View {
                 }
                 .padding(.horizontal, 24)
 
-                Text("Used to calculate your ideal bedtime")
-                    .font(.system(size: 13))
-                    .foregroundStyle(.white.opacity(0.4))
-
-                Spacer()
-            }
+            Text(caption)
+                .font(.system(size: 13))
+                .foregroundStyle(.white.opacity(0.4))
         }
-        .navigationTitle("")
-        .toolbarBackground(.hidden, for: .navigationBar)
     }
 
     private var backgroundView: some View {
