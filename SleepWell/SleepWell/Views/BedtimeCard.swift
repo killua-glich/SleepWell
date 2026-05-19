@@ -4,13 +4,19 @@ struct BedtimeCard: View {
     let option: BedtimeOption
     let onTap: () -> Void
 
+    private static var uses24Hour: Bool {
+        let format = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: .current) ?? ""
+        return !format.contains("a")
+    }
+
     private var timeString: String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm"
+        formatter.dateFormat = Self.uses24Hour ? "HH:mm" : "h:mm"
         return formatter.string(from: option.bedtime)
     }
 
     private var amPmString: String {
+        guard !Self.uses24Hour else { return "" }
         let formatter = DateFormatter()
         formatter.dateFormat = "a"
         return formatter.string(from: option.bedtime)
@@ -39,9 +45,11 @@ struct BedtimeCard: View {
                         Text(timeString)
                             .font(.system(size: 28, weight: .bold, design: .rounded))
                             .foregroundStyle(.white)
-                        Text(amPmString)
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundStyle(.white.opacity(0.5))
+                        if !amPmString.isEmpty {
+                            Text(amPmString)
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(.white.opacity(0.5))
+                        }
                     }
                     Text(option.totalSleepFormatted)
                         .font(.system(size: 12, weight: .regular))
