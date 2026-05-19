@@ -4,13 +4,18 @@ struct SettingsView: View {
     @Environment(SleepViewModel.self) private var viewModel
 
     private enum ExpandedSetting {
-        case fallAsleep, wakeUp
+        case fallAsleep, wakeUp, weekday, weekend
     }
 
     @State private var expanded: ExpandedSetting? = nil
     @AppStorage("defaultWakeHour") private var defaultWakeHour: Int = 7
     @AppStorage("defaultWakeMinute") private var defaultWakeMinute: Int = 0
     private let minuteRange = Array(5...60)
+    @AppStorage("scheduleEnabled") private var scheduleEnabled: Bool = false
+    @AppStorage("weekdayWakeHour") private var weekdayWakeHour: Int = 7
+    @AppStorage("weekdayWakeMinute") private var weekdayWakeMinute: Int = 0
+    @AppStorage("weekendWakeHour") private var weekendWakeHour: Int = 8
+    @AppStorage("weekendWakeMinute") private var weekendWakeMinute: Int = 0
 
     var body: some View {
         ZStack {
@@ -62,6 +67,39 @@ struct SettingsView: View {
                 .padding(.horizontal, 24)
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: expanded)
                 } // end PREFERENCES VStack
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("SCHEDULE")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(.white.opacity(0.4))
+                        .tracking(1.5)
+                        .padding(.horizontal, 28)
+
+                    VStack(spacing: 0) {
+                        scheduleToggleRow
+                        if scheduleEnabled {
+                            Divider().overlay(Color.white.opacity(0.08))
+                                .transition(.opacity.combined(with: .move(edge: .bottom)))
+                            weekdayRow
+                                .transition(.opacity.combined(with: .move(edge: .bottom)))
+                            Divider().overlay(Color.white.opacity(0.08))
+                                .transition(.opacity.combined(with: .move(edge: .bottom)))
+                            weekendRow
+                                .transition(.opacity.combined(with: .move(edge: .bottom)))
+                        }
+                    }
+                    .background {
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(.ultraThinMaterial)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(.white.opacity(0.12), lineWidth: 1)
+                            )
+                    }
+                    .padding(.horizontal, 24)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scheduleEnabled)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.8), value: expanded)
+                }
 
                 Spacer()
             }
@@ -146,6 +184,106 @@ struct SettingsView: View {
         .clipped()
     }
 
+    // MARK: - Schedule toggle row
+
+    private var scheduleToggleRow: some View {
+        HStack {
+            Text("Wake-up schedule")
+                .font(.system(size: 15))
+                .foregroundStyle(.white)
+            Spacer()
+            Toggle("", isOn: Binding(
+                get: { scheduleEnabled },
+                set: { newValue in
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                        expanded = nil
+                    }
+                    scheduleEnabled = newValue
+                }
+            ))
+            .labelsHidden()
+            .tint(Color.accent)
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 16)
+    }
+
+    // MARK: - Weekday row
+
+    private var weekdayRow: some View {
+        VStack(spacing: 0) {
+            Button {
+                expanded = expanded == .weekday ? nil : .weekday
+            } label: {
+                HStack {
+                    Text("Weekdays")
+                        .font(.system(size: 15))
+                        .foregroundStyle(.white)
+                    Spacer()
+                    Text(String(format: "%02d:%02d", weekdayWakeHour, weekdayWakeMinute))
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(Color.accent)
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 16)
+            }
+            .buttonStyle(.plain)
+
+            if expanded == .weekday {
+                DatePicker(
+                    "",
+                    selection: weekdayWakeBinding(),
+                    displayedComponents: .hourAndMinute
+                )
+                .datePickerStyle(.wheel)
+                .labelsHidden()
+                .colorScheme(.dark)
+                .frame(height: 150)
+                .padding(.horizontal, 8)
+                .transition(.opacity.combined(with: .move(edge: .bottom)))
+            }
+        }
+        .clipped()
+    }
+
+    // MARK: - Weekend row
+
+    private var weekendRow: some View {
+        VStack(spacing: 0) {
+            Button {
+                expanded = expanded == .weekend ? nil : .weekend
+            } label: {
+                HStack {
+                    Text("Weekend")
+                        .font(.system(size: 15))
+                        .foregroundStyle(.white)
+                    Spacer()
+                    Text(String(format: "%02d:%02d", weekendWakeHour, weekendWakeMinute))
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(Color.accent)
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 16)
+            }
+            .buttonStyle(.plain)
+
+            if expanded == .weekend {
+                DatePicker(
+                    "",
+                    selection: weekendWakeBinding(),
+                    displayedComponents: .hourAndMinute
+                )
+                .datePickerStyle(.wheel)
+                .labelsHidden()
+                .colorScheme(.dark)
+                .frame(height: 150)
+                .padding(.horizontal, 8)
+                .transition(.opacity.combined(with: .move(edge: .bottom)))
+            }
+        }
+        .clipped()
+    }
+
     // MARK: - Helpers
 
     private var wakeTimeLabel: String {
@@ -163,6 +301,28 @@ struct SettingsView: View {
                 let components = Calendar.current.dateComponents([.hour, .minute], from: newDate)
                 vm.defaultWakeHour = components.hour ?? 7
                 vm.defaultWakeMinute = components.minute ?? 0
+            }
+        )
+    }
+
+    private func weekdayWakeBinding() -> Binding<Date> {
+        Binding(
+            get: { SleepViewModel.makeWakeDate(hour: weekdayWakeHour, minute: weekdayWakeMinute) },
+            set: { newDate in
+                let components = Calendar.current.dateComponents([.hour, .minute], from: newDate)
+                weekdayWakeHour = components.hour ?? 7
+                weekdayWakeMinute = components.minute ?? 0
+            }
+        )
+    }
+
+    private func weekendWakeBinding() -> Binding<Date> {
+        Binding(
+            get: { SleepViewModel.makeWakeDate(hour: weekendWakeHour, minute: weekendWakeMinute) },
+            set: { newDate in
+                let components = Calendar.current.dateComponents([.hour, .minute], from: newDate)
+                weekendWakeHour = components.hour ?? 8
+                weekendWakeMinute = components.minute ?? 0
             }
         )
     }
