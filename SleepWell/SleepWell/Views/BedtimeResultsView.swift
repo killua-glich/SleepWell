@@ -2,7 +2,8 @@ import SwiftUI
 
 struct BedtimeResultsView: View {
     @Environment(SleepViewModel.self) private var viewModel
-    @Environment(\.openURL) private var openURL
+    @State private var alarmScheduler = AlarmScheduler()
+    @State private var alarmResultMessage: String? = nil
 
     private static let timeFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -83,14 +84,30 @@ struct BedtimeResultsView: View {
             titleVisibility: .visible
         ) {
             Button("Set Alarm") {
-                if let url = URL(string: "clock://") {
-                    openURL(url)
-                }
+                guard let option = viewModel.selectedOption else { return }
+                let alarmDate = option.bedtime
                 viewModel.selectedOption = nil
+                Task {
+                    let result = await alarmScheduler.schedule(at: alarmDate)
+                    switch result {
+                    case .scheduled:
+                        alarmResultMessage = "Alarm set"
+                    case .denied:
+                        alarmResultMessage = "Calendar access denied — enable it in Settings"
+                    case .failed:
+                        alarmResultMessage = "Could not create alarm"
+                    }
+                }
             }
             Button("Cancel", role: .cancel) {
                 viewModel.selectedOption = nil
             }
+        }
+        .alert(alarmResultMessage ?? "", isPresented: .init(
+            get: { alarmResultMessage != nil },
+            set: { if !$0 { alarmResultMessage = nil } }
+        )) {
+            Button("OK", role: .cancel) {}
         }
     }
 
