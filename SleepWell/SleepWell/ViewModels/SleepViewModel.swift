@@ -29,6 +29,11 @@ final class SleepViewModel {
         showResults = true
     }
 
+    func calculateWakeUp() {
+        mode = .wakeUp
+        calculate()
+    }
+
     func calculateSleepNow() {
         mode = .sleepNow
         calculate()

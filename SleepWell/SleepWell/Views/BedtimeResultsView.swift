@@ -83,7 +83,7 @@ struct BedtimeResultsView: View {
             titleVisibility: .visible
         ) {
             Button("Set Alarm") {
-                if let url = URL(string: "clock-alarm://") {
+                if let url = URL(string: "clock://") {
                     openURL(url)
                 }
                 viewModel.selectedOption = nil

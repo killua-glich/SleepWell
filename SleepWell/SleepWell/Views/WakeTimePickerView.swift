@@ -43,7 +43,7 @@ struct WakeTimePickerView: View {
                 .padding(.horizontal, 24)
 
                 Button {
-                    viewModel.calculate()
+                    viewModel.calculateWakeUp()
                 } label: {
                     Text("Calculate Bedtimes")
                         .font(.system(size: 17, weight: .semibold))
