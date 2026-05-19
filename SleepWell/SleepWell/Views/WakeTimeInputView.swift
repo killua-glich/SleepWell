@@ -11,7 +11,7 @@ struct WakeTimeInputView: View {
                 Spacer()
                     .frame(maxHeight: 40)
 
-                VStack(spacing: 12) {
+                VStack(spacing: 6) {
                     Image("Logo")
                         .resizable()
                         .scaledToFit()
