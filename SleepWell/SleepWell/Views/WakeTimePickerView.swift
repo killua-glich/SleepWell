@@ -2,6 +2,7 @@ import SwiftUI
 
 struct WakeTimePickerView: View {
     @Environment(SleepViewModel.self) private var viewModel
+    @State private var hasPrefilledDefault = false
 
     var body: some View {
         ZStack {
@@ -77,7 +78,10 @@ struct WakeTimePickerView: View {
             }
         }
         .onAppear {
-            viewModel.wakeTime = viewModel.defaultWakeDate
+            if !hasPrefilledDefault {
+                viewModel.wakeTime = viewModel.defaultWakeDate
+                hasPrefilledDefault = true
+            }
         }
         .navigationTitle("")
         .toolbarBackground(.hidden, for: .navigationBar)
