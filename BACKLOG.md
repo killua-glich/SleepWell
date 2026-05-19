@@ -6,8 +6,8 @@
 - [x] Reverse mode / Sleep Now — "I'm going to sleep now, when should I wake up?" calculates optimal alarm times from current time
 - [x] Take a Nap mode — power nap (20 min) and recovery nap (90 min) options calculated from current time
 - [x] Default wake-up time — user sets a persistent wake-up target used for recommendations
-- [ ] Wake-up schedule — separate defaults for weekdays vs weekends
+- [x] Wake-up schedule — separate defaults for weekdays vs weekends
 - [ ] Widget — home screen widget showing recommended sleep time based on default wake-up schedule
 
 ---
-_Last updated: 2026-05-19_ (default wake-up time: persisted in Settings, pre-fills Wake Up At picker)
+_Last updated: 2026-05-19_ (wake-up schedule: toggle-gated weekday/weekend times in Settings)
