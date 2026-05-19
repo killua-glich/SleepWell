@@ -52,8 +52,9 @@ final class AlarmScheduler {
 
         do {
             logger.info("Scheduling alarm at \(date)")
-            _ = try await manager.schedule(id: UUID(), configuration: config)
-            logger.info("Alarm scheduled successfully")
+            let alarm = try await manager.schedule(id: UUID(), configuration: config)
+            let allAlarms = (try? manager.alarms) ?? []
+            logger.info("Alarm scheduled successfully. ID: \(alarm.id). Total AlarmKit alarms stored: \(allAlarms.count)")
             return .scheduled
         } catch {
             logger.error("schedule() threw: \(error)")
