@@ -34,10 +34,17 @@ struct SettingsView: View {
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(.white.opacity(0.4))
                         .tracking(2)
-                    Text("Personalize")
+                    Text("Settings")
                         .font(.system(size: 26, weight: .bold))
                         .foregroundStyle(.white)
                 }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("PREFERENCES")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(.white.opacity(0.4))
+                        .tracking(1.5)
+                        .padding(.horizontal, 28)
 
                 VStack(spacing: 0) {
                     fallAsleepRow
@@ -54,6 +61,7 @@ struct SettingsView: View {
                 }
                 .padding(.horizontal, 24)
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: expanded)
+                } // end PREFERENCES VStack
 
                 Spacer()
             }
