@@ -1,4 +1,5 @@
 import SwiftUI
+import AlarmKit
 
 struct SettingsView: View {
     @Environment(SleepViewModel.self) private var viewModel
@@ -16,6 +17,9 @@ struct SettingsView: View {
     @AppStorage("weekdayWakeMinute") private var weekdayWakeMinute: Int = 0
     @AppStorage("weekendWakeHour") private var weekendWakeHour: Int = 8
     @AppStorage("weekendWakeMinute") private var weekendWakeMinute: Int = 0
+    @AppStorage("alarmLabel") private var alarmLabel: String = "Wake Up"
+    @State private var showDeleteConfirm: Bool = false
+    @State private var deleteResultMessage: String? = nil
 
     var body: some View {
         ZStack {
@@ -68,6 +72,8 @@ struct SettingsView: View {
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: expanded)
                 } // end PREFERENCES VStack
 
+                alarmsSection
+
                 VStack(alignment: .leading, spacing: 6) {
                     Text("SCHEDULE")
                         .font(.system(size: 11, weight: .semibold))
@@ -106,6 +112,79 @@ struct SettingsView: View {
         }
         .navigationTitle("")
         .toolbarBackground(.hidden, for: .navigationBar)
+    }
+
+    // MARK: - Alarms section
+
+    private var alarmsSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("ALARMS")
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(.white.opacity(0.4))
+                .tracking(1.5)
+                .padding(.horizontal, 28)
+
+            VStack(spacing: 0) {
+                // Alarm Name row
+                HStack {
+                    Text("Alarm Name")
+                        .font(.system(size: 15))
+                        .foregroundStyle(.white)
+                    Spacer()
+                    TextField("Wake Up", text: $alarmLabel)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(Color.accent)
+                        .multilineTextAlignment(.trailing)
+                        .frame(maxWidth: 160)
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 16)
+
+                // Delete All Alarms button (iOS 26+ only)
+                if #available(iOS 26, *) {
+                    Divider().overlay(Color.white.opacity(0.08))
+
+                    Button {
+                        showDeleteConfirm = true
+                    } label: {
+                        HStack {
+                            Text("Delete All Alarms")
+                                .font(.system(size: 15))
+                                .foregroundStyle(.red)
+                            Spacer()
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 16)
+                    }
+                    .buttonStyle(.plain)
+                    .confirmationDialog(
+                        "Delete all scheduled alarms?",
+                        isPresented: $showDeleteConfirm,
+                        titleVisibility: .visible
+                    ) {
+                        Button("Delete All", role: .destructive) {
+                            Task { await deleteAllAlarms() }
+                        }
+                        Button("Cancel", role: .cancel) {}
+                    }
+                }
+            }
+            .background {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(.white.opacity(0.12), lineWidth: 1)
+                    )
+            }
+            .padding(.horizontal, 24)
+            .alert(deleteResultMessage ?? "", isPresented: .init(
+                get: { deleteResultMessage != nil },
+                set: { if !$0 { deleteResultMessage = nil } }
+            )) {
+                Button("OK", role: .cancel) {}
+            }
+        }
     }
 
     // MARK: - Fall asleep row
@@ -285,6 +364,18 @@ struct SettingsView: View {
     }
 
     // MARK: - Helpers
+
+    @available(iOS 26, *)
+    private func deleteAllAlarms() async {
+        let alarms = (try? AlarmManager.shared.alarms) ?? []
+        for alarm in alarms {
+            try? await AlarmManager.shared.cancel(id: alarm.id)
+        }
+        let count = alarms.count
+        deleteResultMessage = count == 0
+            ? "No alarms scheduled"
+            : "Deleted \(count) alarm\(count == 1 ? "" : "s")"
+    }
 
     private var wakeTimeLabel: String {
         String(format: "%02d:%02d", defaultWakeHour, defaultWakeMinute)
