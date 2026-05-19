@@ -23,8 +23,32 @@ final class SleepViewModel {
     @ObservationIgnored
     @AppStorage("defaultWakeMinute") var defaultWakeMinute: Int = 0
 
+    @ObservationIgnored
+    @AppStorage("scheduleEnabled") var scheduleEnabled: Bool = false
+
+    @ObservationIgnored
+    @AppStorage("weekdayWakeHour") var weekdayWakeHour: Int = 7
+
+    @ObservationIgnored
+    @AppStorage("weekdayWakeMinute") var weekdayWakeMinute: Int = 0
+
+    @ObservationIgnored
+    @AppStorage("weekendWakeHour") var weekendWakeHour: Int = 8
+
+    @ObservationIgnored
+    @AppStorage("weekendWakeMinute") var weekendWakeMinute: Int = 0
+
     var defaultWakeDate: Date {
         SleepViewModel.makeWakeDate(hour: defaultWakeHour, minute: defaultWakeMinute)
+    }
+
+    func effectiveWakeDate(referenceDate: Date = Date()) -> Date {
+        guard scheduleEnabled else { return defaultWakeDate }
+        if Calendar.current.isDateInWeekend(referenceDate) {
+            return SleepViewModel.makeWakeDate(hour: weekendWakeHour, minute: weekendWakeMinute)
+        } else {
+            return SleepViewModel.makeWakeDate(hour: weekdayWakeHour, minute: weekdayWakeMinute)
+        }
     }
 
     static func makeWakeDate(hour: Int, minute: Int) -> Date {
