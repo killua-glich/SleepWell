@@ -8,6 +8,8 @@ struct SettingsView: View {
     }
 
     @State private var expanded: ExpandedSetting? = nil
+    @AppStorage("defaultWakeHour") private var defaultWakeHour: Int = 7
+    @AppStorage("defaultWakeMinute") private var defaultWakeMinute: Int = 0
     private let minuteRange = Array(5...60)
 
     var body: some View {
@@ -26,7 +28,7 @@ struct SettingsView: View {
 
                 VStack(spacing: 0) {
                     fallAsleepRow
-                    Divider().background(.white.opacity(0.08))
+                    Divider().overlay(Color.white.opacity(0.08))
                     wakeUpRow
                 }
                 .background {
@@ -38,6 +40,7 @@ struct SettingsView: View {
                         )
                 }
                 .padding(.horizontal, 24)
+                .animation(.spring(response: 0.3, dampingFraction: 0.8), value: expanded)
 
                 Spacer()
             }
@@ -51,9 +54,7 @@ struct SettingsView: View {
     private var fallAsleepRow: some View {
         VStack(spacing: 0) {
             Button {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                    expanded = expanded == .fallAsleep ? nil : .fallAsleep
-                }
+                expanded = expanded == .fallAsleep ? nil : .fallAsleep
             } label: {
                 HStack {
                     Text("Fall asleep time")
@@ -80,7 +81,7 @@ struct SettingsView: View {
                 .colorScheme(.dark)
                 .frame(height: 150)
                 .padding(.horizontal, 8)
-                .transition(.opacity.combined(with: .move(edge: .top)))
+                .transition(.opacity.combined(with: .move(edge: .bottom)))
             }
         }
         .clipped()
@@ -91,9 +92,7 @@ struct SettingsView: View {
     private var wakeUpRow: some View {
         VStack(spacing: 0) {
             Button {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                    expanded = expanded == .wakeUp ? nil : .wakeUp
-                }
+                expanded = expanded == .wakeUp ? nil : .wakeUp
             } label: {
                 HStack {
                     Text("Default wake-up")
@@ -120,7 +119,7 @@ struct SettingsView: View {
                 .colorScheme(.dark)
                 .frame(height: 150)
                 .padding(.horizontal, 8)
-                .transition(.opacity.combined(with: .move(edge: .top)))
+                .transition(.opacity.combined(with: .move(edge: .bottom)))
             }
         }
         .clipped()
@@ -129,9 +128,7 @@ struct SettingsView: View {
     // MARK: - Helpers
 
     private var wakeTimeLabel: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: viewModel.defaultWakeDate)
+        String(format: "%02d:%02d", defaultWakeHour, defaultWakeMinute)
     }
 
     // NOTE: defaultWakeHour and defaultWakeMinute are @ObservationIgnored, so SwiftUI's
