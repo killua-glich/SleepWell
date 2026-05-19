@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSAlarmKitUsageDescription</key>
-	<string>SleepWell uses alarms to wake you at the optimal point in your sleep cycle.</string>
+	<string>Used to set an alarm when you tap "Set Alarm". No alarms are set automatically.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
