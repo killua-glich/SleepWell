@@ -76,6 +76,9 @@ struct WakeTimePickerView: View {
                 Spacer()
             }
         }
+        .onAppear {
+            viewModel.wakeTime = viewModel.defaultWakeDate
+        }
         .navigationTitle("")
         .toolbarBackground(.hidden, for: .navigationBar)
     }
