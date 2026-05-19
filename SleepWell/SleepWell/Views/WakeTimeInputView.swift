@@ -8,7 +8,8 @@ struct WakeTimeInputView: View {
             backgroundView
 
             VStack(spacing: 32) {
-                Spacer(minLength: 20)
+                Spacer()
+                    .frame(maxHeight: 40)
 
                 VStack(spacing: 12) {
                     Image("Logo")
