@@ -136,6 +136,7 @@ struct SettingsView: View {
                         .foregroundStyle(Color.accent)
                         .multilineTextAlignment(.trailing)
                         .frame(maxWidth: 160)
+                        .accessibilityLabel("Alarm Name")
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)
