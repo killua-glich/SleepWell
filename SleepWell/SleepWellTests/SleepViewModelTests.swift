@@ -87,3 +87,14 @@ struct EffectiveWakeDateTests {
         #expect(components.minute == 0)
     }
 }
+
+@Suite("SleepViewModel alarmLabel")
+struct AlarmLabelTests {
+
+    @Test("alarmLabel default is Wake Up")
+    func alarmLabelDefault() {
+        UserDefaults.standard.removeObject(forKey: "alarmLabel")
+        let vm = SleepViewModel()
+        #expect(vm.alarmLabel == "Wake Up")
+    }
+}

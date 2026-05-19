@@ -38,6 +38,9 @@ final class SleepViewModel {
     @ObservationIgnored
     @AppStorage("weekendWakeMinute") var weekendWakeMinute: Int = 0
 
+    @ObservationIgnored
+    @AppStorage("alarmLabel") var alarmLabel: String = "Wake Up"
+
     var defaultWakeDate: Date {
         SleepViewModel.makeWakeDate(hour: defaultWakeHour, minute: defaultWakeMinute)
     }
