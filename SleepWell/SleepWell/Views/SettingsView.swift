@@ -16,14 +16,27 @@ struct SettingsView: View {
         ZStack {
             backgroundView
 
+            if expanded != nil {
+                Color.clear
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                            expanded = nil
+                        }
+                    }
+            }
+
             VStack(spacing: 32) {
                 Spacer()
 
                 VStack(spacing: 6) {
-                    Text("Settings")
+                    Text("SleepWell")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(.white.opacity(0.4))
                         .tracking(2)
+                    Text("Personalize")
+                        .font(.system(size: 26, weight: .bold))
+                        .foregroundStyle(.white)
                 }
 
                 VStack(spacing: 0) {
