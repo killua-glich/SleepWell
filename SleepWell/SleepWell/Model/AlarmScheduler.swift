@@ -1,5 +1,8 @@
 import AlarmKit
+import OSLog
 import SwiftUI
+
+private let logger = Logger(subsystem: "com.highland.SleepWell", category: "AlarmScheduler")
 
 @available(iOS 26, *)
 struct SleepAlarmMetadata: AlarmMetadata {}
@@ -14,16 +17,25 @@ enum AlarmResult {
 @MainActor
 final class AlarmScheduler {
     func schedule(at date: Date, label: String = "Time to wake up") async -> AlarmResult {
+        logger.info("schedule() called for date: \(date)")
+
         guard #available(iOS 26, *) else {
+            logger.warning("iOS version too old for AlarmKit")
             return .unsupportedOS
         }
 
         let manager = AlarmManager.shared
 
         do {
+            logger.info("Calling requestAuthorization()")
             let state = try await manager.requestAuthorization()
-            guard state == .authorized else { return .denied }
+            logger.info("requestAuthorization() returned: \(String(describing: state))")
+            guard state == .authorized else {
+                logger.warning("Not authorized — state: \(String(describing: state))")
+                return .denied
+            }
         } catch {
+            logger.error("requestAuthorization() threw: \(error)")
             return .failed(error)
         }
 
@@ -39,9 +51,12 @@ final class AlarmScheduler {
         )
 
         do {
+            logger.info("Scheduling alarm at \(date)")
             _ = try await manager.schedule(id: UUID(), configuration: config)
+            logger.info("Alarm scheduled successfully")
             return .scheduled
         } catch {
+            logger.error("schedule() threw: \(error)")
             return .failed(error)
         }
     }
