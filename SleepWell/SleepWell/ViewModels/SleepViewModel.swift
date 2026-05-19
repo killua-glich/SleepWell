@@ -8,7 +8,7 @@ enum SleepMode {
 
 @Observable
 final class SleepViewModel {
-    var wakeTime: Date = defaultWakeTime()
+    var wakeTime: Date = SleepViewModel.makeWakeDate(hour: 7, minute: 0)
     var bedtimes: [BedtimeOption] = []
     var showResults: Bool = false
     var selectedOption: BedtimeOption? = nil
@@ -16,6 +16,23 @@ final class SleepViewModel {
 
     @ObservationIgnored
     @AppStorage("fallAsleepMinutes") var fallAsleepMinutes: Int = 14
+
+    @ObservationIgnored
+    @AppStorage("defaultWakeHour") var defaultWakeHour: Int = 7
+
+    @ObservationIgnored
+    @AppStorage("defaultWakeMinute") var defaultWakeMinute: Int = 0
+
+    var defaultWakeDate: Date {
+        SleepViewModel.makeWakeDate(hour: defaultWakeHour, minute: defaultWakeMinute)
+    }
+
+    static func makeWakeDate(hour: Int, minute: Int) -> Date {
+        var components = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        components.hour = hour
+        components.minute = minute
+        return Calendar.current.date(from: components) ?? Date()
+    }
 
     func calculate() {
         switch mode {
@@ -50,11 +67,4 @@ final class SleepViewModel {
         selectedOption = nil
         mode = .wakeUp
     }
-}
-
-private func defaultWakeTime() -> Date {
-    var components = Calendar.current.dateComponents([.year, .month, .day], from: Date())
-    components.hour = 7
-    components.minute = 0
-    return Calendar.current.date(from: components) ?? Date()
 }
