@@ -94,6 +94,8 @@ struct BedtimeResultsView: View {
                         alarmResultMessage = "Alarm set"
                     case .denied:
                         alarmResultMessage = "Alarm access denied — enable it in Settings"
+                    case .unsupportedOS:
+                        alarmResultMessage = "Setting alarms requires iOS 26 or later"
                     case .failed:
                         alarmResultMessage = "Could not set alarm"
                     }
