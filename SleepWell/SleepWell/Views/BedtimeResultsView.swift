@@ -89,7 +89,7 @@ struct BedtimeResultsView: View {
                 let alarmDate = option.bedtime
                 viewModel.selectedOption = nil
                 Task {
-                    let result = await alarmScheduler.schedule(at: alarmDate)
+                    let result = await alarmScheduler.schedule(at: alarmDate, label: viewModel.alarmLabel)
                     switch result {
                     case .scheduled:
                         alarmResultMessage = "Alarm set"
