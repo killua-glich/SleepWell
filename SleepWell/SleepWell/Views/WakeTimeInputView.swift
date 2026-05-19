@@ -8,13 +8,13 @@ struct WakeTimeInputView: View {
             backgroundView
 
             VStack(spacing: 32) {
-                Spacer()
+                Spacer(minLength: 20)
 
                 VStack(spacing: 12) {
                     Image("Logo")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 80, height: 80)
+                        .frame(width: 80, height: 96)
 
                     Text("SleepWell")
                         .font(.system(size: 12, weight: .semibold))
@@ -62,7 +62,7 @@ struct WakeTimeInputView: View {
                 }
                 .padding(.horizontal, 24)
 
-                Spacer()
+                Spacer(minLength: 60)
             }
         }
         .navigationTitle("")
