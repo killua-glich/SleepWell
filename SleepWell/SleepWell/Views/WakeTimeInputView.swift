@@ -10,7 +10,12 @@ struct WakeTimeInputView: View {
             VStack(spacing: 32) {
                 Spacer()
 
-                VStack(spacing: 6) {
+                VStack(spacing: 12) {
+                    Image("Logo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80, height: 80)
+
                     Text("SleepWell")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(.white.opacity(0.4))
