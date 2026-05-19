@@ -1,4 +1,7 @@
-import EventKit
+import AlarmKit
+import SwiftUI
+
+struct SleepAlarmMetadata: AlarmMetadata {}
 
 enum AlarmResult {
     case scheduled
@@ -8,25 +11,29 @@ enum AlarmResult {
 
 @MainActor
 final class AlarmScheduler {
-    private let store = EKEventStore()
+    func schedule(at date: Date, label: String = "Time to wake up") async -> AlarmResult {
+        let manager = AlarmManager.shared
 
-    func schedule(at date: Date, title: String = "Time to wake up") async -> AlarmResult {
         do {
-            let granted = try await store.requestFullAccessToEvents()
-            guard granted else { return .denied }
+            let state = try await manager.requestAuthorization()
+            guard state == .authorized else { return .denied }
         } catch {
             return .failed(error)
         }
 
-        let event = EKEvent(eventStore: store)
-        event.title = title
-        event.startDate = date
-        event.endDate = date.addingTimeInterval(3600)
-        event.calendar = store.defaultCalendarForNewEvents
-        event.addAlarm(EKAlarm(absoluteDate: date))
+        let alert = AlarmPresentation.Alert(title: LocalizedStringResource(stringLiteral: label))
+        let presentation = AlarmPresentation(alert: alert)
+        let attributes = AlarmAttributes<SleepAlarmMetadata>(
+            presentation: presentation,
+            tintColor: Color.accentColor
+        )
+        let config = AlarmManager.AlarmConfiguration<SleepAlarmMetadata>.alarm(
+            schedule: .fixed(date),
+            attributes: attributes
+        )
 
         do {
-            try store.save(event, span: .thisEvent, commit: true)
+            _ = try await manager.schedule(id: UUID(), configuration: config)
             return .scheduled
         } catch {
             return .failed(error)

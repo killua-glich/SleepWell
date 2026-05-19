@@ -93,9 +93,9 @@ struct BedtimeResultsView: View {
                     case .scheduled:
                         alarmResultMessage = "Alarm set"
                     case .denied:
-                        alarmResultMessage = "Calendar access denied — enable it in Settings"
+                        alarmResultMessage = "Alarm access denied — enable it in Settings"
                     case .failed:
-                        alarmResultMessage = "Could not create alarm"
+                        alarmResultMessage = "Could not set alarm"
                     }
                 }
             }
