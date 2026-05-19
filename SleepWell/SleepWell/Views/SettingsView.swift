@@ -34,7 +34,6 @@ struct SettingsView: View {
 
                     // MARK: - Default wake-up time
                     settingSection(label: "Default wake-up time", caption: "Pre-fills the Wake Up At picker") {
-                        @Bindable var vm = viewModel
                         DatePicker(
                             "",
                             selection: defaultWakeBinding(vm: viewModel),
@@ -54,6 +53,10 @@ struct SettingsView: View {
     }
 
     // Converts the two AppStorage ints to a Binding<Date> for the DatePicker.
+    // NOTE: defaultWakeHour and defaultWakeMinute are @ObservationIgnored, so SwiftUI's
+    // observation machinery won't re-evaluate this binding's get-closure if those values
+    // are mutated externally. On this settings screen that's fine — the picker is the
+    // only writer.
     private func defaultWakeBinding(vm: SleepViewModel) -> Binding<Date> {
         Binding(
             get: { vm.defaultWakeDate },
