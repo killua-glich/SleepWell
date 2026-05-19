@@ -15,7 +15,7 @@ struct WakeTimeInputView: View {
                     Image("Logo")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 84, height: 101)
+                        .frame(width: 92, height: 110)
 
                     Text("SleepWell")
                         .font(.system(size: 12, weight: .semibold))
