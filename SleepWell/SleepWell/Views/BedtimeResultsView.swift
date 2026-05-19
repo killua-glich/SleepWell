@@ -7,7 +7,8 @@ struct BedtimeResultsView: View {
 
     private static let timeFormatter: DateFormatter = {
         let f = DateFormatter()
-        f.dateFormat = "h:mm a"
+        f.dateStyle = .none
+        f.timeStyle = .short
         return f
     }()
 
