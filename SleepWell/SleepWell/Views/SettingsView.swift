@@ -9,15 +9,15 @@ struct SettingsView: View {
     }
 
     @State private var expanded: ExpandedSetting? = nil
-    @AppStorage("defaultWakeHour") private var defaultWakeHour: Int = 7
-    @AppStorage("defaultWakeMinute") private var defaultWakeMinute: Int = 0
+    @AppStorage("defaultWakeHour", store: .appGroup) private var defaultWakeHour: Int = 7
+    @AppStorage("defaultWakeMinute", store: .appGroup) private var defaultWakeMinute: Int = 0
     private let minuteRange = Array(5...60)
-    @AppStorage("scheduleEnabled") private var scheduleEnabled: Bool = false
-    @AppStorage("weekdayWakeHour") private var weekdayWakeHour: Int = 7
-    @AppStorage("weekdayWakeMinute") private var weekdayWakeMinute: Int = 0
-    @AppStorage("weekendWakeHour") private var weekendWakeHour: Int = 8
-    @AppStorage("weekendWakeMinute") private var weekendWakeMinute: Int = 0
-    @AppStorage("alarmLabel") private var alarmLabel: String = "Wake Up"
+    @AppStorage("scheduleEnabled", store: .appGroup) private var scheduleEnabled: Bool = false
+    @AppStorage("weekdayWakeHour", store: .appGroup) private var weekdayWakeHour: Int = 7
+    @AppStorage("weekdayWakeMinute", store: .appGroup) private var weekdayWakeMinute: Int = 0
+    @AppStorage("weekendWakeHour", store: .appGroup) private var weekendWakeHour: Int = 8
+    @AppStorage("weekendWakeMinute", store: .appGroup) private var weekendWakeMinute: Int = 0
+    @AppStorage("alarmLabel", store: .appGroup) private var alarmLabel: String = "Wake Up"
     @State private var showDeleteConfirm: Bool = false
     @State private var deleteResultMessage: String? = nil
 
