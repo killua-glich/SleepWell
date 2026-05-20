@@ -15,31 +15,31 @@ final class SleepViewModel {
     var mode: SleepMode = .wakeUp
 
     @ObservationIgnored
-    @AppStorage("fallAsleepMinutes") var fallAsleepMinutes: Int = 14
+    @AppStorage("fallAsleepMinutes", store: .appGroup) var fallAsleepMinutes: Int = 14
 
     @ObservationIgnored
-    @AppStorage("defaultWakeHour") var defaultWakeHour: Int = 7
+    @AppStorage("defaultWakeHour", store: .appGroup) var defaultWakeHour: Int = 7
 
     @ObservationIgnored
-    @AppStorage("defaultWakeMinute") var defaultWakeMinute: Int = 0
+    @AppStorage("defaultWakeMinute", store: .appGroup) var defaultWakeMinute: Int = 0
 
     @ObservationIgnored
-    @AppStorage("scheduleEnabled") var scheduleEnabled: Bool = false
+    @AppStorage("scheduleEnabled", store: .appGroup) var scheduleEnabled: Bool = false
 
     @ObservationIgnored
-    @AppStorage("weekdayWakeHour") var weekdayWakeHour: Int = 7
+    @AppStorage("weekdayWakeHour", store: .appGroup) var weekdayWakeHour: Int = 7
 
     @ObservationIgnored
-    @AppStorage("weekdayWakeMinute") var weekdayWakeMinute: Int = 0
+    @AppStorage("weekdayWakeMinute", store: .appGroup) var weekdayWakeMinute: Int = 0
 
     @ObservationIgnored
-    @AppStorage("weekendWakeHour") var weekendWakeHour: Int = 8
+    @AppStorage("weekendWakeHour", store: .appGroup) var weekendWakeHour: Int = 8
 
     @ObservationIgnored
-    @AppStorage("weekendWakeMinute") var weekendWakeMinute: Int = 0
+    @AppStorage("weekendWakeMinute", store: .appGroup) var weekendWakeMinute: Int = 0
 
     @ObservationIgnored
-    @AppStorage("alarmLabel") var alarmLabel: String = "Wake Up"
+    @AppStorage("alarmLabel", store: .appGroup) var alarmLabel: String = "Wake Up"
 
     var defaultWakeDate: Date {
         SleepViewModel.makeWakeDate(hour: defaultWakeHour, minute: defaultWakeMinute)
@@ -85,6 +85,12 @@ final class SleepViewModel {
 
     func calculateNapNow() {
         mode = .nap
+        calculate()
+    }
+
+    func calculateFromEffectiveSchedule() {
+        wakeTime = effectiveWakeDate()
+        mode = .wakeUp
         calculate()
     }
 
