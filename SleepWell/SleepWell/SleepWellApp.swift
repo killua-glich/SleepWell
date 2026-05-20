@@ -14,6 +14,10 @@ struct SleepWellApp: App {
             }
             .environment(viewModel)
             .preferredColorScheme(.dark)
+            .onOpenURL { url in
+                guard url.scheme == "sleepwell", url.host == "results" else { return }
+                viewModel.calculateFromEffectiveSchedule()
+            }
         }
     }
 }
