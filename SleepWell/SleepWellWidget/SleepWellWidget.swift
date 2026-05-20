@@ -1,88 +1,90 @@
-//
-//  SleepWellWidget.swift
-//  SleepWellWidget
-//
-//  Created by diego on 20.05.26.
-//
-
 import WidgetKit
 import SwiftUI
 
-struct Provider: AppIntentTimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationAppIntent())
-    }
+// MARK: - Timeline Entry
 
-    func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: configuration)
-    }
-    
-    func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
-        var entries: [SimpleEntry] = []
-
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, configuration: configuration)
-            entries.append(entry)
-        }
-
-        return Timeline(entries: entries, policy: .atEnd)
-    }
-
-//    func relevances() async -> WidgetRelevances<ConfigurationAppIntent> {
-//        // Generate a list containing the contexts this widget is relevant in.
-//    }
-}
-
-struct SimpleEntry: TimelineEntry {
+struct SleepWellWidgetEntry: TimelineEntry {
     let date: Date
-    let configuration: ConfigurationAppIntent
+    let bedtimes: [BedtimeOption]
+    let wakeTime: Date
 }
 
-struct SleepWellWidgetEntryView : View {
-    var entry: Provider.Entry
+// MARK: - Timeline Provider
+
+struct SleepWellWidgetProvider: TimelineProvider {
+    func placeholder(in context: Context) -> SleepWellWidgetEntry {
+        makePlaceholder()
+    }
+
+    func getSnapshot(in context: Context, completion: @escaping (SleepWellWidgetEntry) -> Void) {
+        completion(makeEntry())
+    }
+
+    func getTimeline(in context: Context, completion: @escaping (Timeline<SleepWellWidgetEntry>) -> Void) {
+        let entry = makeEntry()
+        // Refresh at next midnight so bedtimes recalculate for the new day
+        let midnight = Calendar.current.startOfDay(for: Date()).addingTimeInterval(86_400)
+        completion(Timeline(entries: [entry], policy: .after(midnight)))
+    }
+
+    // MARK: - Helpers
+
+    private func makeEntry() -> SleepWellWidgetEntry {
+        let reader = WidgetScheduleReader()
+        let now = Date()
+        return SleepWellWidgetEntry(
+            date: now,
+            bedtimes: reader.bedtimes(for: now),
+            wakeTime: reader.effectiveWakeTime(for: now)
+        )
+    }
+
+    private func makePlaceholder() -> SleepWellWidgetEntry {
+        var c = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        c.hour = 7; c.minute = 0
+        let wake = Calendar.current.date(from: c) ?? Date()
+        return SleepWellWidgetEntry(
+            date: Date(),
+            bedtimes: SleepCalculator.calculate(wakeTime: wake, fallAsleepMinutes: 14),
+            wakeTime: wake
+        )
+    }
+}
+
+// MARK: - Entry View (routes to size-specific views)
+
+struct SleepWellWidgetEntryView: View {
+    var entry: SleepWellWidgetProvider.Entry
+    @Environment(\.widgetFamily) private var family
 
     var body: some View {
-        VStack {
-            Text("Time:")
-            Text(entry.date, style: .time)
-
-            Text("Favorite Emoji:")
-            Text(entry.configuration.favoriteEmoji)
+        Group {
+            switch family {
+            case .systemSmall:
+                SmallWidgetView(entry: entry)
+            case .systemMedium:
+                MediumWidgetView(entry: entry)
+            case .systemLarge:
+                LargeWidgetView(entry: entry)
+            default:
+                SmallWidgetView(entry: entry)
+            }
         }
+        .widgetURL(URL(string: "sleepwell://results")!)
     }
 }
+
+// MARK: - Widget Declaration
 
 struct SleepWellWidget: Widget {
-    let kind: String = "SleepWellWidget"
+    let kind = "SleepWellWidget"
 
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
+        StaticConfiguration(kind: kind, provider: SleepWellWidgetProvider()) { entry in
             SleepWellWidgetEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
         }
+        .configurationDisplayName("SleepWell")
+        .description("Tonight's recommended bedtime.")
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
-}
-
-extension ConfigurationAppIntent {
-    fileprivate static var smiley: ConfigurationAppIntent {
-        let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "😀"
-        return intent
-    }
-    
-    fileprivate static var starEyes: ConfigurationAppIntent {
-        let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "🤩"
-        return intent
-    }
-}
-
-#Preview(as: .systemSmall) {
-    SleepWellWidget()
-} timeline: {
-    SimpleEntry(date: .now, configuration: .smiley)
-    SimpleEntry(date: .now, configuration: .starEyes)
 }
