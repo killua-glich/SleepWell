@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		04EA198B2FBE392800665E87 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA198A2FBE392800665E87 /* WidgetKit.framework */; };
+		04EA198D2FBE392800665E87 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EA198C2FBE392800665E87 /* SwiftUI.framework */; };
+		04EA199E2FBE392900665E87 /* SleepWellWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 04EA19882FBE392800665E87 /* SleepWellWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		04795FB92FBB0022002506CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,12 +27,37 @@
 			remoteGlobalIDString = 04795FAA2FBB0021002506CC;
 			remoteInfo = SleepWell;
 		};
+		04EA199C2FBE392900665E87 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 04795FA32FBB0021002506CC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 04EA19872FBE392800665E87;
+			remoteInfo = SleepWellWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		04EA19A32FBE392900665E87 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				04EA199E2FBE392900665E87 /* SleepWellWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		04795FAB2FBB0021002506CC /* SleepWell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SleepWell.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04795FB82FBB0022002506CC /* SleepWellTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SleepWellTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		04795FC22FBB0022002506CC /* SleepWellUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SleepWellUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		04EA19882FBE392800665E87 /* SleepWellWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SleepWellWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		04EA198A2FBE392800665E87 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		04EA198C2FBE392800665E87 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		04EA19A42FBE394900665E87 /* SleepWellWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SleepWellWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +67,13 @@
 				Info.plist,
 			);
 			target = 04795FAA2FBB0021002506CC /* SleepWell */;
+		};
+		04EA19A22FBE392900665E87 /* Exceptions for "SleepWellWidget" folder in "SleepWellWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 04EA19872FBE392800665E87 /* SleepWellWidgetExtension */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -56,6 +94,14 @@
 		04795FC52FBB0022002506CC /* SleepWellUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = SleepWellUITests;
+			sourceTree = "<group>";
+		};
+		04EA198E2FBE392800665E87 /* SleepWellWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				04EA19A22FBE392900665E87 /* Exceptions for "SleepWellWidget" folder in "SleepWellWidgetExtension" target */,
+			);
+			path = SleepWellWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -82,15 +128,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		04EA19852FBE392800665E87 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04EA198D2FBE392800665E87 /* SwiftUI.framework in Frameworks */,
+				04EA198B2FBE392800665E87 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		04795FA22FBB0021002506CC = {
 			isa = PBXGroup;
 			children = (
+				04EA19A42FBE394900665E87 /* SleepWellWidgetExtension.entitlements */,
 				04795FAD2FBB0021002506CC /* SleepWell */,
 				04795FBB2FBB0022002506CC /* SleepWellTests */,
 				04795FC52FBB0022002506CC /* SleepWellUITests */,
+				04EA198E2FBE392800665E87 /* SleepWellWidget */,
+				04EA19892FBE392800665E87 /* Frameworks */,
 				04795FAC2FBB0021002506CC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -101,8 +159,18 @@
 				04795FAB2FBB0021002506CC /* SleepWell.app */,
 				04795FB82FBB0022002506CC /* SleepWellTests.xctest */,
 				04795FC22FBB0022002506CC /* SleepWellUITests.xctest */,
+				04EA19882FBE392800665E87 /* SleepWellWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		04EA19892FBE392800665E87 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				04EA198A2FBE392800665E87 /* WidgetKit.framework */,
+				04EA198C2FBE392800665E87 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -115,10 +183,12 @@
 				04795FA72FBB0021002506CC /* Sources */,
 				04795FA82FBB0021002506CC /* Frameworks */,
 				04795FA92FBB0021002506CC /* Resources */,
+				04EA19A32FBE392900665E87 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				04EA199D2FBE392900665E87 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				04795FAD2FBB0021002506CC /* SleepWell */,
@@ -176,6 +246,28 @@
 			productReference = 04795FC22FBB0022002506CC /* SleepWellUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		04EA19872FBE392800665E87 /* SleepWellWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 04EA199F2FBE392900665E87 /* Build configuration list for PBXNativeTarget "SleepWellWidgetExtension" */;
+			buildPhases = (
+				04EA19842FBE392800665E87 /* Sources */,
+				04EA19852FBE392800665E87 /* Frameworks */,
+				04EA19862FBE392800665E87 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				04EA198E2FBE392800665E87 /* SleepWellWidget */,
+			);
+			name = SleepWellWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = SleepWellWidgetExtension;
+			productReference = 04EA19882FBE392800665E87 /* SleepWellWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -183,7 +275,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2640;
+				LastSwiftUpdateCheck = 2650;
 				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					04795FAA2FBB0021002506CC = {
@@ -196,6 +288,9 @@
 					04795FC12FBB0022002506CC = {
 						CreatedOnToolsVersion = 26.4.1;
 						TestTargetID = 04795FAA2FBB0021002506CC;
+					};
+					04EA19872FBE392800665E87 = {
+						CreatedOnToolsVersion = 26.5;
 					};
 				};
 			};
@@ -216,6 +311,7 @@
 				04795FAA2FBB0021002506CC /* SleepWell */,
 				04795FB72FBB0022002506CC /* SleepWellTests */,
 				04795FC12FBB0022002506CC /* SleepWellUITests */,
+				04EA19872FBE392800665E87 /* SleepWellWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -236,6 +332,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		04795FC02FBB0022002506CC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		04EA19862FBE392800665E87 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -266,6 +369,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		04EA19842FBE392800665E87 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -278,6 +388,11 @@
 			isa = PBXTargetDependency;
 			target = 04795FAA2FBB0021002506CC /* SleepWell */;
 			targetProxy = 04795FC32FBB0022002506CC /* PBXContainerItemProxy */;
+		};
+		04EA199D2FBE392900665E87 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 04EA19872FBE392800665E87 /* SleepWellWidgetExtension */;
+			targetProxy = 04EA199C2FBE392900665E87 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -403,6 +518,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SleepWell/SleepWell.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZGBV6QVU66;
@@ -449,6 +565,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SleepWell/SleepWell.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZGBV6QVU66;
@@ -592,6 +709,73 @@
 			};
 			name = Release;
 		};
+		04EA19A02FBE392900665E87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SleepWellWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ZGBV6QVU66;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SleepWellWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SleepWellWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.highland.SleepWell.SleepWellWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		04EA19A12FBE392900665E87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SleepWellWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ZGBV6QVU66;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SleepWellWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SleepWellWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.highland.SleepWell.SleepWellWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -627,6 +811,15 @@
 			buildConfigurations = (
 				04795FD32FBB0022002506CC /* Debug */,
 				04795FD42FBB0022002506CC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		04EA199F2FBE392900665E87 /* Build configuration list for PBXNativeTarget "SleepWellWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				04EA19A02FBE392900665E87 /* Debug */,
+				04EA19A12FBE392900665E87 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
