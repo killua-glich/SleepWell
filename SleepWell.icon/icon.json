@@ -1,0 +1,90 @@
+{
+  "fill" : {
+    "linear-gradient" : [
+      "display-p3:0.33538,0.42797,0.93565,1.00000",
+      "srgb:0.12810,0.16694,0.33644,1.00000"
+    ],
+    "orientation" : {
+      "start" : {
+        "x" : 0.5,
+        "y" : 0
+      },
+      "stop" : {
+        "x" : 0.5,
+        "y" : 0.7
+      }
+    }
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "extended-gray:0.00000,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "linear-gradient" : [
+                  "srgb:0.95611,0.95611,0.95611,1.00000",
+                  "srgb:0.34510,0.34510,0.34510,1.00000"
+                ],
+                "orientation" : {
+                  "start" : {
+                    "x" : 0.8849125099885143,
+                    "y" : -0.06773831552307102
+                  },
+                  "stop" : {
+                    "x" : 0,
+                    "y" : 0.8160784255067942
+                  }
+                }
+              }
+            },
+            {
+              "appearance" : "tinted",
+              "value" : {
+                "solid" : "extended-gray:1.00000,1.00000"
+              }
+            }
+          ],
+          "glass-specializations" : [
+            {
+              "value" : false
+            },
+            {
+              "appearance" : "tinted",
+              "value" : false
+            }
+          ],
+          "image-name" : "SleepWell.svg",
+          "name" : "SleepWell",
+          "position" : {
+            "scale" : 0.76,
+            "translation-in-points" : [
+              13.825761426958707,
+              12.937474164293235
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}

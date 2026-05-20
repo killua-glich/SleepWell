@@ -2,6 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.highland.SleepWell</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>sleepwell</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSAlarmKitUsageDescription</key>
 	<string>Used to set an alarm when you tap "Set Alarm". No alarms are set automatically.</string>
 	<key>UIBackgroundModes</key>
