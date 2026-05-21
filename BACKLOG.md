@@ -14,7 +14,7 @@
 - [ ] Siri Shortcuts — "Hey Siri, when should I go to sleep tonight?" returns recommended bedtime based on default wake-up schedule
 - [ ] Live Activities / Dynamic Island — countdown to bedtime on lock screen and Dynamic Island
 - [ ] Sleep At mode — after selecting a bedtime, starts a silent countdown; notification when 3h left; Live Activity countdown kicks in at 1h left
-- [ ] Accessibility — VoiceOver labels, Dynamic Type support, sufficient color contrast audit
+- [x] Accessibility — VoiceOver labels, Dynamic Type support, sufficient color contrast audit
 
 ## Pre-release
 
@@ -25,4 +25,4 @@ _Goal: Tasks required before App Store submission_
 - [ ] Localization — wrap all hardcoded UI strings, add language targets, export/import `.xliff` for translation
 
 ---
-_Last updated: 2026-05-20_ (widget: small/medium/large, App Group, deep link)
+_Last updated: 2026-05-20_ (accessibility: VoiceOver, Dynamic Type, WCAG AA contrast, UI audit tests)
