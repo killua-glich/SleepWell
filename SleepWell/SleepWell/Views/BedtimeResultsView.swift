@@ -31,6 +31,17 @@ struct BedtimeResultsView: View {
         }
     }
 
+    private var accessibilityHeaderLabel: String {
+        switch viewModel.mode {
+        case .wakeUp:
+            return "Wake up at \(Self.timeFormatter.string(from: viewModel.wakeTime)). \(headerTitle)"
+        case .sleepNow:
+            return "Sleeping now. \(headerTitle)"
+        case .nap:
+            return "Napping now. \(headerTitle)"
+        }
+    }
+
     private var showDialog: Binding<Bool> {
         Binding(
             get: { viewModel.selectedOption != nil },
@@ -60,6 +71,7 @@ struct BedtimeResultsView: View {
                         .foregroundStyle(.white)
                 }
                 .accessibilityElement(children: .combine)
+                .accessibilityLabel(accessibilityHeaderLabel)
                 .accessibilityAddTraits(.isHeader)
                 .padding(.top, 20)
                 .padding(.bottom, 24)
