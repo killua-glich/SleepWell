@@ -16,15 +16,18 @@ struct WakeTimeInputView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 92, height: 110)
+                        .accessibilityHidden(true)
 
                     Text("SleepWell")
-                        .font(.system(size: 12, weight: .semibold))
+                        .font(.caption.weight(.semibold))
                         .foregroundStyle(.white.opacity(0.4))
                         .tracking(2)
+                        .accessibilityHidden(true)
 
                     Text("How can I help?")
-                        .font(.system(size: 26, weight: .bold))
+                        .font(.title.weight(.bold))
                         .foregroundStyle(.white)
+                        .accessibilityAddTraits(.isHeader)
                 }
 
                 VStack(spacing: 16) {
@@ -38,6 +41,8 @@ struct WakeTimeInputView: View {
                         )
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel("Sleep Now")
+                    .accessibilityHint("Shows the best times to wake up")
 
                     NavigationLink {
                         WakeTimePickerView()
@@ -49,6 +54,8 @@ struct WakeTimeInputView: View {
                         )
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel("Wake Up At")
+                    .accessibilityHint("Tell me when to go to bed")
 
                     Button {
                         viewModel.calculateNapNow()
@@ -60,6 +67,8 @@ struct WakeTimeInputView: View {
                         )
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel("Take a Nap")
+                    .accessibilityHint("Power nap or full recovery")
                 }
                 .padding(.horizontal, 24)
 
@@ -76,6 +85,7 @@ struct WakeTimeInputView: View {
                     Image(systemName: "gearshape")
                         .foregroundStyle(.white.opacity(0.7))
                 }
+                .accessibilityLabel("Settings")
             }
         }
     }
@@ -87,21 +97,24 @@ struct WakeTimeInputView: View {
                 .font(.system(size: 24))
                 .foregroundStyle(Color.accent)
                 .frame(width: 36)
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.system(size: 17, weight: .semibold))
+                    .font(.headline)
                     .foregroundStyle(.white)
                 Text(subtitle)
-                    .font(.system(size: 13))
-                    .foregroundStyle(.white.opacity(0.5))
+                    .font(.footnote)
+                    .foregroundStyle(.white.opacity(0.6))
             }
+            .accessibilityHidden(true)
 
             Spacer()
 
             Image(systemName: "chevron.right")
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(.white.opacity(0.3))
+                .accessibilityHidden(true)
         }
         .padding(20)
         .background {
