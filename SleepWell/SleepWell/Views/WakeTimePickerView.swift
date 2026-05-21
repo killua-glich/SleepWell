@@ -14,7 +14,7 @@ struct WakeTimePickerView: View {
                 VStack(spacing: 6) {
                     Text("SleepWell")
                         .font(.caption.weight(.semibold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.white.opacity(0.4))
                         .tracking(2)
                         .accessibilityHidden(true)
 
