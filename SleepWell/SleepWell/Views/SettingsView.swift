@@ -40,20 +40,23 @@ struct SettingsView: View {
 
                 VStack(spacing: 6) {
                     Text("SleepWell")
-                        .font(.system(size: 12, weight: .semibold))
+                        .font(.caption.weight(.semibold))
                         .foregroundStyle(.white.opacity(0.4))
                         .tracking(2)
+                        .accessibilityHidden(true)
                     Text("Settings")
-                        .font(.system(size: 26, weight: .bold))
+                        .font(.title.weight(.bold))
                         .foregroundStyle(.white)
+                        .accessibilityAddTraits(.isHeader)
                 }
 
                 VStack(alignment: .leading, spacing: 6) {
                     Text("PREFERENCES")
-                        .font(.system(size: 11, weight: .semibold))
+                        .font(.caption2.weight(.semibold))
                         .foregroundStyle(.white.opacity(0.4))
                         .tracking(1.5)
                         .padding(.horizontal, 28)
+                        .accessibilityHidden(true)
 
                 VStack(spacing: 0) {
                     fallAsleepRow
@@ -70,16 +73,17 @@ struct SettingsView: View {
                 }
                 .padding(.horizontal, 24)
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: expanded)
-                } // end PREFERENCES VStack
+                }
 
                 alarmsSection
 
                 VStack(alignment: .leading, spacing: 6) {
                     Text("SCHEDULE")
-                        .font(.system(size: 11, weight: .semibold))
+                        .font(.caption2.weight(.semibold))
                         .foregroundStyle(.white.opacity(0.4))
                         .tracking(1.5)
                         .padding(.horizontal, 28)
+                        .accessibilityHidden(true)
 
                     VStack(spacing: 0) {
                         scheduleToggleRow
@@ -119,20 +123,21 @@ struct SettingsView: View {
     private var alarmsSection: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("ALARMS")
-                .font(.system(size: 11, weight: .semibold))
+                .font(.caption2.weight(.semibold))
                 .foregroundStyle(.white.opacity(0.4))
                 .tracking(1.5)
                 .padding(.horizontal, 28)
+                .accessibilityHidden(true)
 
             VStack(spacing: 0) {
                 // Alarm Name row
                 HStack {
                     Text("Alarm Name")
-                        .font(.system(size: 15))
+                        .font(.body)
                         .foregroundStyle(.white)
                     Spacer()
                     TextField("Wake Up", text: $alarmLabel)
-                        .font(.system(size: 15, weight: .semibold))
+                        .font(.body.weight(.semibold))
                         .foregroundStyle(Color.accent)
                         .multilineTextAlignment(.trailing)
                         .frame(maxWidth: 160)
@@ -150,7 +155,7 @@ struct SettingsView: View {
                     } label: {
                         HStack {
                             Text("Delete All Alarms")
-                                .font(.system(size: 15))
+                                .font(.body)
                                 .foregroundStyle(.red)
                             Spacer()
                         }
@@ -197,17 +202,19 @@ struct SettingsView: View {
             } label: {
                 HStack {
                     Text("Fall asleep time")
-                        .font(.system(size: 15))
+                        .font(.body)
                         .foregroundStyle(.white)
                     Spacer()
                     Text("\(viewModel.fallAsleepMinutes) min")
-                        .font(.system(size: 15, weight: .semibold))
+                        .font(.body.weight(.semibold))
                         .foregroundStyle(Color.accent)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Fall asleep time, \(viewModel.fallAsleepMinutes) minutes")
+            .accessibilityHint("Adjust")
 
             if expanded == .fallAsleep {
                 @Bindable var vm = viewModel
@@ -235,17 +242,19 @@ struct SettingsView: View {
             } label: {
                 HStack {
                     Text("Default wake-up")
-                        .font(.system(size: 15))
+                        .font(.body)
                         .foregroundStyle(.white)
                     Spacer()
                     Text(wakeTimeLabel)
-                        .font(.system(size: 15, weight: .semibold))
+                        .font(.body.weight(.semibold))
                         .foregroundStyle(Color.accent)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Default wake-up, \(wakeTimeLabel)")
+            .accessibilityHint("Adjust")
 
             if expanded == .wakeUp {
                 DatePicker(
@@ -269,7 +278,7 @@ struct SettingsView: View {
     private var scheduleToggleRow: some View {
         HStack {
             Text("Wake-up schedule")
-                .font(.system(size: 15))
+                .font(.body)
                 .foregroundStyle(.white)
             Spacer()
             Toggle("", isOn: Binding(
@@ -283,6 +292,7 @@ struct SettingsView: View {
             ))
             .labelsHidden()
             .tint(Color.accent)
+            .accessibilityLabel("Wake-up schedule")
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
@@ -297,17 +307,19 @@ struct SettingsView: View {
             } label: {
                 HStack {
                     Text("Weekdays")
-                        .font(.system(size: 15))
+                        .font(.body)
                         .foregroundStyle(.white)
                     Spacer()
                     Text(String(format: "%02d:%02d", weekdayWakeHour, weekdayWakeMinute))
-                        .font(.system(size: 15, weight: .semibold))
+                        .font(.body.weight(.semibold))
                         .foregroundStyle(Color.accent)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Weekdays, \(String(format: "%02d:%02d", weekdayWakeHour, weekdayWakeMinute))")
+            .accessibilityHint("Adjust")
 
             if expanded == .weekday {
                 DatePicker(
@@ -335,17 +347,19 @@ struct SettingsView: View {
             } label: {
                 HStack {
                     Text("Weekend")
-                        .font(.system(size: 15))
+                        .font(.body)
                         .foregroundStyle(.white)
                     Spacer()
                     Text(String(format: "%02d:%02d", weekendWakeHour, weekendWakeMinute))
-                        .font(.system(size: 15, weight: .semibold))
+                        .font(.body.weight(.semibold))
                         .foregroundStyle(Color.accent)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Weekend, \(String(format: "%02d:%02d", weekendWakeHour, weekendWakeMinute))")
+            .accessibilityHint("Adjust")
 
             if expanded == .weekend {
                 DatePicker(
@@ -382,10 +396,6 @@ struct SettingsView: View {
         String(format: "%02d:%02d", defaultWakeHour, defaultWakeMinute)
     }
 
-    // NOTE: defaultWakeHour and defaultWakeMinute are @ObservationIgnored, so SwiftUI's
-    // observation machinery won't re-evaluate this binding's get-closure if those values
-    // are mutated externally. On this settings screen that's fine — the picker is the
-    // only writer.
     private func defaultWakeBinding(vm: SleepViewModel) -> Binding<Date> {
         Binding(
             get: { vm.defaultWakeDate },
