@@ -36,6 +36,31 @@ struct BedtimeCard: View {
         option.isRecommended || option.napLabel != nil
     }
 
+    // MARK: - Accessibility
+
+    private var accessibilityTimeString: String {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        return formatter.string(from: option.bedtime)
+    }
+
+    private var accessibleDurationString: String {
+        let hours = option.totalSleepMinutes / 60
+        let minutes = option.totalSleepMinutes % 60
+        if hours == 0 { return "\(minutes) minutes" }
+        if minutes == 0 { return "\(hours) hour\(hours == 1 ? "" : "s")" }
+        return "\(hours) hour\(hours == 1 ? "" : "s") \(minutes) minutes"
+    }
+
+    private var accessibilityCardLabel: String {
+        if let nap = option.napLabel {
+            return "\(accessibilityTimeString), \(nap) nap, \(accessibleDurationString)"
+        }
+        let recommended = option.isRecommended ? "recommended, " : ""
+        let cycles = "\(option.cycles) sleep cycle\(option.cycles == 1 ? "" : "s")"
+        return "\(accessibilityTimeString), \(recommended)\(accessibleDurationString), \(cycles)"
+    }
+
     var body: some View {
         Button(action: onTap) {
             HStack(alignment: .center) {
@@ -43,17 +68,19 @@ struct BedtimeCard: View {
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(alignment: .lastTextBaseline, spacing: 4) {
                         Text(timeString)
-                            .font(.system(size: 28, weight: .bold, design: .rounded))
+                            .font(.system(.title, design: .rounded).weight(.bold))
                             .foregroundStyle(.white)
                         if !amPmString.isEmpty {
                             Text(amPmString)
-                                .font(.system(size: 14, weight: .regular))
-                                .foregroundStyle(.white.opacity(0.5))
+                                .font(.footnote)
+                                .foregroundStyle(.white.opacity(0.55))
+                                .accessibilityHidden(true)
                         }
                     }
                     Text(option.totalSleepFormatted)
-                        .font(.system(size: 12, weight: .regular))
-                        .foregroundStyle(.white.opacity(option.isRecommended ? 0.6 : 0.4))
+                        .font(.caption)
+                        .foregroundStyle(.white.opacity(option.isRecommended ? 0.6 : 0.55))
+                        .accessibilityHidden(true)
                 }
 
                 Spacer()
@@ -62,8 +89,8 @@ struct BedtimeCard: View {
                 if option.napLabel == nil {
                     VStack(alignment: .trailing, spacing: 4) {
                         Text("\(option.cycles) cycles")
-                            .font(.system(size: 10, weight: .semibold))
-                            .foregroundStyle(.white.opacity(0.45))
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(.white.opacity(0.55))
                         HStack(spacing: 4) {
                             ForEach(0..<option.cycles, id: \.self) { _ in
                                 Circle()
@@ -76,6 +103,7 @@ struct BedtimeCard: View {
                             }
                         }
                     }
+                    .accessibilityHidden(true)
                 }
             }
             .padding(.horizontal, 16)
@@ -105,7 +133,7 @@ struct BedtimeCard: View {
             .overlay(alignment: .topTrailing) {
                 if option.isRecommended {
                     Text("RECOMMENDED")
-                        .font(.system(size: 9, weight: .bold))
+                        .font(.caption2.weight(.bold))
                         .foregroundStyle(Color.accent)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
@@ -115,9 +143,10 @@ struct BedtimeCard: View {
                         )
                         .padding(.trailing, 12)
                         .padding(.top, 8)
+                        .accessibilityHidden(true)
                 } else if let label = option.napLabel {
                     Text(label.uppercased())
-                        .font(.system(size: 9, weight: .bold))
+                        .font(.caption2.weight(.bold))
                         .foregroundStyle(.white.opacity(0.5))
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
@@ -127,10 +156,13 @@ struct BedtimeCard: View {
                         )
                         .padding(.trailing, 12)
                         .padding(.top, 8)
+                        .accessibilityHidden(true)
                 }
             }
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(accessibilityCardLabel)
+        .accessibilityHint("Double tap to set alarm")
     }
 }
 
