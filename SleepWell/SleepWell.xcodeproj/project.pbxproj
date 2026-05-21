@@ -80,14 +80,14 @@
 			membershipExceptions = (
 				Assets.xcassets,
 				Info.plist,
-				"SleepWell.entitlements",
+				"Intents/IntentSettingsReader.swift",
 				SleepWellApp.swift,
-				"ViewModels/SleepViewModel.swift",
-				"Views/BedtimeCard.swift",
-				"Views/BedtimeResultsView.swift",
-				"Views/SettingsView.swift",
-				"Views/WakeTimeInputView.swift",
-				"Views/WakeTimePickerView.swift",
+				ViewModels/SleepViewModel.swift,
+				Views/BedtimeCard.swift,
+				Views/BedtimeResultsView.swift,
+				Views/SettingsView.swift,
+				Views/WakeTimeInputView.swift,
+				Views/WakeTimePickerView.swift,
 			);
 			target = 04EA19872FBE392800665E87 /* SleepWellWidgetExtension */;
 		};
@@ -276,8 +276,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				04EA198E2FBE392800665E87 /* SleepWellWidget */,
 				04795FAD2FBB0021002506CC /* SleepWell */,
+				04EA198E2FBE392800665E87 /* SleepWellWidget */,
 			);
 			name = SleepWellWidgetExtension;
 			packageProductDependencies = (
