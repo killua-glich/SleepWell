@@ -63,7 +63,7 @@ struct BedtimeResultsView: View {
                 VStack(spacing: 4) {
                     Text(headerEyebrow)
                         .font(.caption2.weight(.semibold))
-                        .foregroundStyle(.white.opacity(0.5))
+                        .foregroundStyle(.white)
                         .tracking(1.5)
 
                     Text(headerTitle)

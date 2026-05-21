@@ -20,7 +20,7 @@ struct WakeTimeInputView: View {
 
                     Text("SleepWell")
                         .font(.caption.weight(.semibold))
-                        .foregroundStyle(.white.opacity(0.4))
+                        .foregroundStyle(.white)
                         .tracking(2)
                         .accessibilityHidden(true)
 
@@ -83,7 +83,7 @@ struct WakeTimeInputView: View {
                     SettingsView()
                 } label: {
                     Image(systemName: "gearshape")
-                        .foregroundStyle(.white.opacity(0.7))
+                        .foregroundStyle(.white)
                 }
                 .accessibilityLabel("Settings")
             }
@@ -105,7 +105,7 @@ struct WakeTimeInputView: View {
                     .foregroundStyle(.white)
                 Text(subtitle)
                     .font(.footnote)
-                    .foregroundStyle(.white.opacity(0.6))
+                    .foregroundStyle(.white)
             }
             .accessibilityHidden(true)
 
@@ -113,7 +113,7 @@ struct WakeTimeInputView: View {
 
             Image(systemName: "chevron.right")
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.3))
+                .foregroundStyle(.white)
                 .accessibilityHidden(true)
         }
         .padding(20)

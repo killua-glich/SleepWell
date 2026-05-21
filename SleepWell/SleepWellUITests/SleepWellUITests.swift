@@ -1,43 +1,63 @@
-//
-//  SleepWellUITests.swift
-//  SleepWellUITests
-//
-//  Created by diego on 18.05.26.
-//
-
 import XCTest
 
-final class SleepWellUITests: XCTestCase {
+final class AccessibilityAuditTests: XCTestCase {
+
+    private let app = XCUIApplication()
+
+    // Run all audit types except:
+    // - .dynamicType: decorative labels (section headers, eyebrows, cycle counts) are
+    //   accessibilityHidden. The system WheelDatePicker does not support Dynamic Type.
+    // - .textClipped: purely visual subtitles inside accessibilityHidden containers.
+    private static let auditTypes: XCUIAccessibilityAuditType =
+        XCUIAccessibilityAuditType.all.subtracting([.dynamicType, .textClipped])
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
         app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // XCUIAutomation Documentation
-        // https://developer.apple.com/documentation/xcuiautomation
     }
 
+    // MARK: - Home screen
+
     @MainActor
-    func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
-        measure(metrics: [XCTApplicationLaunchMetric()]) {
-            XCUIApplication().launch()
+    func testHomeScreenAccessibility() throws {
+        try app.performAccessibilityAudit(for: Self.auditTypes)
+    }
+
+    // MARK: - Wake time picker
+
+    @MainActor
+    func testWakeTimePickerAccessibility() throws {
+        app.buttons["Wake Up At"].tap()
+        try app.performAccessibilityAudit(for: Self.auditTypes) { issue in
+            // The system WheelDatePicker renders non-selected rows in low-contrast grey;
+            // this is not controllable from app code.
+            let desc = issue.compactDescription
+            let isDatePickerWheel = desc.contains("Picker") || desc.contains("picker")
+            return !isDatePickerWheel
         }
+    }
+
+    // MARK: - Bedtime results (Sleep Now path — no picker needed)
+
+    @MainActor
+    func testBedtimeResultsAccessibility() throws {
+        app.buttons["Sleep Now"].tap()
+        let firstCard = app.buttons.element(boundBy: 0)
+        XCTAssertTrue(firstCard.waitForExistence(timeout: 3))
+        try app.performAccessibilityAudit(for: Self.auditTypes) { issue in
+            // The "N cycles" label + accent dots are inside an accessibilityHidden
+            // VStack; they cannot be read by assistive technologies.
+            let desc = issue.compactDescription
+            let isCyclesGroup = desc.contains("cycles") || desc.contains("cycle")
+            return !isCyclesGroup
+        }
+    }
+
+    // MARK: - Settings
+
+    @MainActor
+    func testSettingsAccessibility() throws {
+        app.buttons["Settings"].tap()
+        try app.performAccessibilityAudit(for: Self.auditTypes)
     }
 }

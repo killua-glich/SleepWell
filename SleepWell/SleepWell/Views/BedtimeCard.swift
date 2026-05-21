@@ -74,13 +74,13 @@ struct BedtimeCard: View {
                         if !amPmString.isEmpty {
                             Text(amPmString)
                                 .font(.footnote)
-                                .foregroundStyle(.white.opacity(0.55))
+                                .foregroundStyle(.white)
                                 .accessibilityHidden(true)
                         }
                     }
                     Text(option.totalSleepFormatted)
                         .font(.caption)
-                        .foregroundStyle(.white.opacity(option.isRecommended ? 0.6 : 0.55))
+                        .foregroundStyle(.white)
                         .accessibilityHidden(true)
                 }
 
@@ -91,7 +91,7 @@ struct BedtimeCard: View {
                     VStack(alignment: .trailing, spacing: 4) {
                         Text("\(option.cycles) cycles")
                             .font(.caption2.weight(.semibold))
-                            .foregroundStyle(.white.opacity(0.55))
+                            .foregroundStyle(.white)
                         HStack(spacing: 4) {
                             ForEach(0..<option.cycles, id: \.self) { _ in
                                 Circle()
@@ -148,12 +148,12 @@ struct BedtimeCard: View {
                 } else if let label = option.napLabel {
                     Text(label.uppercased())
                         .font(.caption2.weight(.bold))
-                        .foregroundStyle(.white.opacity(0.5))
+                        .foregroundStyle(.white)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
                         .overlay(
                             Capsule()
-                                .stroke(.white.opacity(0.3), lineWidth: 1.5)
+                                .stroke(.white.opacity(0.45), lineWidth: 1.5)
                         )
                         .padding(.trailing, 12)
                         .padding(.top, 8)

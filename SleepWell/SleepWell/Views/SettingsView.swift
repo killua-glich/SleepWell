@@ -41,7 +41,7 @@ struct SettingsView: View {
                 VStack(spacing: 6) {
                     Text("SleepWell")
                         .font(.caption.weight(.semibold))
-                        .foregroundStyle(.white.opacity(0.4))
+                        .foregroundStyle(.white)
                         .tracking(2)
                         .accessibilityHidden(true)
                     Text("Settings")
@@ -53,7 +53,7 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("PREFERENCES")
                         .font(.caption2.weight(.semibold))
-                        .foregroundStyle(.white.opacity(0.4))
+                        .foregroundStyle(.white)
                         .tracking(1.5)
                         .padding(.horizontal, 28)
                         .accessibilityHidden(true)
@@ -80,7 +80,7 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("SCHEDULE")
                         .font(.caption2.weight(.semibold))
-                        .foregroundStyle(.white.opacity(0.4))
+                        .foregroundStyle(.white)
                         .tracking(1.5)
                         .padding(.horizontal, 28)
                         .accessibilityHidden(true)
@@ -124,7 +124,7 @@ struct SettingsView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("ALARMS")
                 .font(.caption2.weight(.semibold))
-                .foregroundStyle(.white.opacity(0.4))
+                .foregroundStyle(.white)
                 .tracking(1.5)
                 .padding(.horizontal, 28)
                 .accessibilityHidden(true)
@@ -138,7 +138,7 @@ struct SettingsView: View {
                     Spacer()
                     TextField("Wake Up", text: $alarmLabel)
                         .font(.body.weight(.semibold))
-                        .foregroundStyle(Color.accent)
+                        .foregroundStyle(.white)
                         .multilineTextAlignment(.trailing)
                         .frame(maxWidth: 160)
                         .accessibilityLabel("Alarm Name")
@@ -156,7 +156,7 @@ struct SettingsView: View {
                         HStack {
                             Text("Delete All Alarms")
                                 .font(.body)
-                                .foregroundStyle(.red)
+                                .foregroundStyle(Color(red: 1.0, green: 0.38, blue: 0.34))
                             Spacer()
                         }
                         .padding(.horizontal, 20)

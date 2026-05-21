@@ -24,5 +24,5 @@ extension Color {
 
     static let appBackground = Color(hex: "0b0d14")
     static let appBackgroundEnd = Color(hex: "090b16")
-    static let accent = Color(hex: "4f6ef7")
+    static let accent = Color(hex: "6b86ff")
 }
