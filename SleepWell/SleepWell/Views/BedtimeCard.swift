@@ -45,9 +45,10 @@ struct BedtimeCard: View {
     }
 
     private var accessibleDurationString: String {
-        let hours = option.totalSleepMinutes / 60
-        let minutes = option.totalSleepMinutes % 60
-        if hours == 0 { return "\(minutes) minutes" }
+        let total = max(option.totalSleepMinutes, 1)
+        let hours = total / 60
+        let minutes = total % 60
+        if hours == 0 { return "\(minutes) minute\(minutes == 1 ? "" : "s")" }
         if minutes == 0 { return "\(hours) hour\(hours == 1 ? "" : "s")" }
         return "\(hours) hour\(hours == 1 ? "" : "s") \(minutes) minutes"
     }
@@ -56,9 +57,9 @@ struct BedtimeCard: View {
         if let nap = option.napLabel {
             return "\(accessibilityTimeString), \(nap) nap, \(accessibleDurationString)"
         }
-        let recommended = option.isRecommended ? "recommended, " : ""
         let cycles = "\(option.cycles) sleep cycle\(option.cycles == 1 ? "" : "s")"
-        return "\(accessibilityTimeString), \(recommended)\(accessibleDurationString), \(cycles)"
+        let recommended = option.isRecommended ? ", recommended" : ""
+        return "\(accessibilityTimeString), \(accessibleDurationString), \(cycles)\(recommended)"
     }
 
     var body: some View {
@@ -162,7 +163,7 @@ struct BedtimeCard: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(accessibilityCardLabel)
-        .accessibilityHint("Double tap to set alarm")
+        .accessibilityHint("Set bedtime alarm")
     }
 }
 
