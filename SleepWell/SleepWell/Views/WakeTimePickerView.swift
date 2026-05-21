@@ -13,13 +13,15 @@ struct WakeTimePickerView: View {
 
                 VStack(spacing: 6) {
                     Text("SleepWell")
-                        .font(.system(size: 12, weight: .semibold))
+                        .font(.caption.weight(.semibold))
                         .foregroundStyle(.white.opacity(0.4))
                         .tracking(2)
+                        .accessibilityHidden(true)
 
                     Text("When do you wake up?")
-                        .font(.system(size: 26, weight: .bold))
+                        .font(.title.weight(.bold))
                         .foregroundStyle(.white)
+                        .accessibilityAddTraits(.isHeader)
                 }
 
                 @Bindable var vm = viewModel
@@ -47,7 +49,7 @@ struct WakeTimePickerView: View {
                     viewModel.calculateWakeUp()
                 } label: {
                     Text("Calculate Bedtimes")
-                        .font(.system(size: 17, weight: .semibold))
+                        .font(.headline)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
