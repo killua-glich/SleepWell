@@ -51,14 +51,16 @@ struct BedtimeResultsView: View {
                 // Header
                 VStack(spacing: 4) {
                     Text(headerEyebrow)
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.4))
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.white.opacity(0.5))
                         .tracking(1.5)
 
                     Text(headerTitle)
-                        .font(.system(size: 22, weight: .bold))
+                        .font(.title2.weight(.bold))
                         .foregroundStyle(.white)
                 }
+                .accessibilityElement(children: .combine)
+                .accessibilityAddTraits(.isHeader)
                 .padding(.top, 20)
                 .padding(.bottom, 24)
 
