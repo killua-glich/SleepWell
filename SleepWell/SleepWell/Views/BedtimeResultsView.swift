@@ -117,8 +117,18 @@ struct BedtimeResultsView: View {
                         alarmResultMessage = "Alarm access denied — enable it in Settings"
                     case .unsupportedOS:
                         alarmResultMessage = "Setting alarms requires iOS 26 or later"
-                    case .failed:
+                    case .failed(let error):
+                        #if DEBUG
+                        // AlarmKit doesn't schedule on simulator — show reminder prompt anyway for testing
+                        if viewModel.mode == .wakeUp {
+                            reminderBedtime = alarmDate
+                        } else {
+                            alarmResultMessage = "Alarm unavailable (simulator)"
+                        }
+                        #else
                         alarmResultMessage = "Could not set alarm"
+                        #endif
+                        _ = error
                     }
                 }
             }
