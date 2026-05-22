@@ -84,6 +84,7 @@
 				Intents/IntentSettingsReader.swift,
 				Intents/NapIntent.swift,
 				Intents/NapType.swift,
+				Intents/SleepIntentsGroup.swift,
 				Intents/SleepNowIntent.swift,
 				SleepWellApp.swift,
 				ViewModels/SleepViewModel.swift,
