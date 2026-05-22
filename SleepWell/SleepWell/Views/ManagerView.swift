@@ -34,7 +34,10 @@ struct ManagerView: View {
         .navigationTitle("Manager")
         .navigationBarTitleDisplayMode(.large)
         .toolbarBackground(.hidden, for: .navigationBar)
-        .onAppear { alarms = alarmScheduler.store.all() }
+        .onAppear {
+            alarms = alarmScheduler.store.all()
+            Task { await countdownManager.handleForeground() }
+        }
         .alert(resultMessage ?? "", isPresented: .init(
             get: { resultMessage != nil },
             set: { if !$0 { resultMessage = nil } }
@@ -51,10 +54,16 @@ struct ManagerView: View {
 
             VStack(alignment: .leading, spacing: 6) {
                 if let bedtime = countdownManager.targetBedtime {
-                    Text(timerInterval: Date.now...bedtime, countsDown: true)
-                        .font(.system(.largeTitle, design: .rounded).weight(.bold))
-                        .foregroundStyle(.white)
-                        .monospacedDigit()
+                    if bedtime > Date.now {
+                        Text(timerInterval: Date.now...bedtime, countsDown: true)
+                            .font(.system(.largeTitle, design: .rounded).weight(.bold))
+                            .foregroundStyle(.white)
+                            .monospacedDigit()
+                    } else {
+                        Text("Now")
+                            .font(.system(.largeTitle, design: .rounded).weight(.bold))
+                            .foregroundStyle(.white)
+                    }
 
                     Text("Bedtime at \(shortTimeString(bedtime))")
                         .font(.subheadline)
