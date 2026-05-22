@@ -82,6 +82,7 @@
 				Info.plist,
 				Intents/BedtimeIntent.swift,
 				Intents/IntentSettingsReader.swift,
+				Intents/SleepNowIntent.swift,
 				Intents/NapType.swift,
 				SleepWellApp.swift,
 				ViewModels/SleepViewModel.swift,
