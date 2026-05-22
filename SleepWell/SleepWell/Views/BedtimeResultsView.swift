@@ -4,6 +4,8 @@ struct BedtimeResultsView: View {
     @Environment(SleepViewModel.self) private var viewModel
     @State private var alarmScheduler = AlarmScheduler()
     @State private var alarmResultMessage: String? = nil
+    @Environment(CountdownManager.self) private var countdownManager
+    @State private var reminderBedtime: Date? = nil
 
     private static let timeFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -106,7 +108,11 @@ struct BedtimeResultsView: View {
                     let result = await alarmScheduler.schedule(at: alarmDate, label: viewModel.alarmLabel)
                     switch result {
                     case .scheduled:
-                        alarmResultMessage = "Alarm set"
+                        if viewModel.mode == .wakeUp {
+                            reminderBedtime = alarmDate
+                        } else {
+                            alarmResultMessage = "Alarm set"
+                        }
                     case .denied:
                         alarmResultMessage = "Alarm access denied — enable it in Settings"
                     case .unsupportedOS:
@@ -125,6 +131,25 @@ struct BedtimeResultsView: View {
             set: { if !$0 { alarmResultMessage = nil } }
         )) {
             Button("OK", role: .cancel) {}
+        }
+        .confirmationDialog(
+            reminderBedtime.map { "Bedtime reminder for \(Self.timeFormatter.string(from: $0))?" } ?? "",
+            isPresented: .init(
+                get: { reminderBedtime != nil },
+                set: { if !$0 { reminderBedtime = nil } }
+            ),
+            titleVisibility: .visible
+        ) {
+            Button("Remind Me") {
+                guard let bedtime = reminderBedtime else { return }
+                reminderBedtime = nil
+                Task { await countdownManager.start(bedtime: bedtime) }
+                alarmResultMessage = "Alarm set. Bedtime reminder active."
+            }
+            Button("Skip", role: .cancel) {
+                reminderBedtime = nil
+                alarmResultMessage = "Alarm set"
+            }
         }
     }
 
