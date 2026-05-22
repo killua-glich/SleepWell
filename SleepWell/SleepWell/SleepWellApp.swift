@@ -28,8 +28,17 @@ struct SleepWellApp: App {
             .environment(countdownManager)
             .preferredColorScheme(.dark)
             .onOpenURL { url in
-                guard url.scheme == "sleepwell", url.host == "results" else { return }
-                viewModel.calculateFromEffectiveSchedule()
+                guard url.scheme == "sleepwell" else { return }
+                if url.host == "results" {
+                    viewModel.calculateFromEffectiveSchedule()
+                }
+                #if DEBUG
+                if url.host == "debug-countdown",
+                   let minutes = Int(url.lastPathComponent), minutes > 0 {
+                    let bedtime = Date().addingTimeInterval(TimeInterval(minutes * 60))
+                    Task { await countdownManager.start(bedtime: bedtime) }
+                }
+                #endif
             }
             .task {
                 await countdownManager.handleForeground()
