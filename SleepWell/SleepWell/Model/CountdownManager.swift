@@ -22,7 +22,11 @@ final class CountdownManager {
     // MARK: - Public API
 
     func start(bedtime: Date) async {
-        guard !isActive else { return }
+        guard bedtime > Date() else { return }
+        if isActive {
+            await endActivity()
+            clearState()
+        }
         isActive = true
         targetBedtime = bedtime
         UserDefaults.appGroup.set(bedtime, forKey: Self.bedtimeKey)

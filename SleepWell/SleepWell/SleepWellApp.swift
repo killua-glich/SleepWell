@@ -38,6 +38,11 @@ struct SleepWellApp: App {
                     let bedtime = Date().addingTimeInterval(TimeInterval(minutes * 60))
                     Task { await countdownManager.start(bedtime: bedtime) }
                 }
+                if url.host == "debug-countdown-secs",
+                   let seconds = Int(url.lastPathComponent), seconds > 0 {
+                    let bedtime = Date().addingTimeInterval(TimeInterval(seconds))
+                    Task { await countdownManager.start(bedtime: bedtime) }
+                }
                 #endif
             }
             .task {

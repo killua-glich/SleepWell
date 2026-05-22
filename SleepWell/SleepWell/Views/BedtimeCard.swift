@@ -2,7 +2,8 @@ import SwiftUI
 
 struct BedtimeCard: View {
     let option: BedtimeOption
-    let onTap: () -> Void
+    let onConfirm: () -> Void
+    @State private var showDialog = false
 
     private static var uses24Hour: Bool {
         let format = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: .current) ?? ""
@@ -63,7 +64,7 @@ struct BedtimeCard: View {
     }
 
     var body: some View {
-        Button(action: onTap) {
+        Button(action: { showDialog = true }) {
             HStack(alignment: .center) {
                 // Left: time + duration
                 VStack(alignment: .leading, spacing: 2) {
@@ -164,6 +165,14 @@ struct BedtimeCard: View {
         .buttonStyle(.plain)
         .accessibilityLabel(accessibilityCardLabel)
         .accessibilityHint("Set bedtime alarm")
+        .confirmationDialog(
+            "Set alarm for \(timeString)\(amPmString.isEmpty ? "" : " \(amPmString)")?",
+            isPresented: $showDialog,
+            titleVisibility: .visible
+        ) {
+            Button("Set Alarm") { onConfirm() }
+            Button("Cancel", role: .cancel) {}
+        }
     }
 }
 
@@ -183,7 +192,7 @@ struct BedtimeCard: View {
                     cycles: 5,
                     isRecommended: true
                 ),
-                onTap: {}
+                onConfirm: {}
             )
             BedtimeCard(
                 option: BedtimeOption(
@@ -193,7 +202,7 @@ struct BedtimeCard: View {
                     isRecommended: false,
                     napLabel: "Refreshing"
                 ),
-                onTap: {}
+                onConfirm: {}
             )
             BedtimeCard(
                 option: BedtimeOption(
@@ -203,7 +212,7 @@ struct BedtimeCard: View {
                     isRecommended: false,
                     napLabel: "Deep Rest"
                 ),
-                onTap: {}
+                onConfirm: {}
             )
         }
         .padding()

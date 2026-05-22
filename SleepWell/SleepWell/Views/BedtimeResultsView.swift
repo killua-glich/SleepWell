@@ -44,18 +44,6 @@ struct BedtimeResultsView: View {
         }
     }
 
-    private var showDialog: Binding<Bool> {
-        Binding(
-            get: { viewModel.selectedOption != nil },
-            set: { if !$0 { viewModel.selectedOption = nil } }
-        )
-    }
-
-    private var dialogTitle: String {
-        guard let option = viewModel.selectedOption else { return "" }
-        return "Set alarm for \(Self.timeFormatter.string(from: option.bedtime))?"
-    }
-
     var body: some View {
         ZStack {
             backgroundView
@@ -83,7 +71,34 @@ struct BedtimeResultsView: View {
                     VStack(spacing: 12) {
                         ForEach(viewModel.bedtimes) { option in
                             BedtimeCard(option: option) {
-                                viewModel.selectedOption = option
+                                let alarmDate = option.bedtime
+                                Task {
+                                    let result = await alarmScheduler.schedule(at: alarmDate, label: viewModel.alarmLabel)
+                                    switch result {
+                                    case .scheduled:
+                                        if viewModel.mode == .wakeUp {
+                                            reminderBedtime = alarmDate
+                                        } else {
+                                            alarmResultMessage = "Alarm set"
+                                        }
+                                    case .denied:
+                                        alarmResultMessage = "Alarm access denied — enable it in Settings"
+                                    case .unsupportedOS:
+                                        alarmResultMessage = "Setting alarms requires iOS 26 or later"
+                                    case .failed(let error):
+                                        #if DEBUG
+                                        alarmScheduler.store.add(ScheduledAlarm(id: UUID(), date: alarmDate, label: viewModel.alarmLabel))
+                                        if viewModel.mode == .wakeUp {
+                                            reminderBedtime = alarmDate
+                                        } else {
+                                            alarmResultMessage = "Alarm set (simulator)"
+                                        }
+                                        #else
+                                        alarmResultMessage = "Could not set alarm"
+                                        #endif
+                                        _ = error
+                                    }
+                                }
                             }
                         }
                     }
@@ -95,47 +110,6 @@ struct BedtimeResultsView: View {
         .navigationBarBackButtonHidden(false)
         .navigationTitle("")
         .toolbarBackground(.hidden, for: .navigationBar)
-        .confirmationDialog(
-            dialogTitle,
-            isPresented: showDialog,
-            titleVisibility: .visible
-        ) {
-            Button("Set Alarm") {
-                guard let option = viewModel.selectedOption else { return }
-                let alarmDate = option.bedtime
-                viewModel.selectedOption = nil
-                Task {
-                    let result = await alarmScheduler.schedule(at: alarmDate, label: viewModel.alarmLabel)
-                    switch result {
-                    case .scheduled:
-                        if viewModel.mode == .wakeUp {
-                            reminderBedtime = alarmDate
-                        } else {
-                            alarmResultMessage = "Alarm set"
-                        }
-                    case .denied:
-                        alarmResultMessage = "Alarm access denied — enable it in Settings"
-                    case .unsupportedOS:
-                        alarmResultMessage = "Setting alarms requires iOS 26 or later"
-                    case .failed(let error):
-                        #if DEBUG
-                        // AlarmKit doesn't schedule on simulator — show reminder prompt anyway for testing
-                        if viewModel.mode == .wakeUp {
-                            reminderBedtime = alarmDate
-                        } else {
-                            alarmResultMessage = "Alarm unavailable (simulator)"
-                        }
-                        #else
-                        alarmResultMessage = "Could not set alarm"
-                        #endif
-                        _ = error
-                    }
-                }
-            }
-            Button("Cancel", role: .cancel) {
-                viewModel.selectedOption = nil
-            }
-        }
         .alert(alarmResultMessage ?? "", isPresented: .init(
             get: { alarmResultMessage != nil },
             set: { if !$0 { alarmResultMessage = nil } }
