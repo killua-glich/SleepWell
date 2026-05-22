@@ -6,6 +6,7 @@ struct BedtimeResultsView: View {
     @State private var alarmResultMessage: String? = nil
     @Environment(CountdownManager.self) private var countdownManager
     @State private var reminderBedtime: Date? = nil
+    @State private var showReminderDialog = false
 
     private static let timeFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -76,8 +77,9 @@ struct BedtimeResultsView: View {
                                     let result = await alarmScheduler.schedule(at: alarmDate, label: viewModel.alarmLabel)
                                     switch result {
                                     case .scheduled:
-                                        if viewModel.mode == .wakeUp {
+                                        if viewModel.mode == .wakeUp && alarmDate > Date() {
                                             reminderBedtime = alarmDate
+                                            showReminderDialog = true
                                         } else {
                                             alarmResultMessage = "Alarm set"
                                         }
@@ -88,8 +90,9 @@ struct BedtimeResultsView: View {
                                     case .failed(let error):
                                         #if DEBUG
                                         alarmScheduler.store.add(ScheduledAlarm(id: UUID(), date: alarmDate, label: viewModel.alarmLabel))
-                                        if viewModel.mode == .wakeUp {
+                                        if viewModel.mode == .wakeUp && alarmDate > Date() {
                                             reminderBedtime = alarmDate
+                                            showReminderDialog = true
                                         } else {
                                             alarmResultMessage = "Alarm set (simulator)"
                                         }
@@ -118,17 +121,18 @@ struct BedtimeResultsView: View {
         }
         .confirmationDialog(
             reminderBedtime.map { "Bedtime reminder for \(Self.timeFormatter.string(from: $0))?" } ?? "",
-            isPresented: .init(
-                get: { reminderBedtime != nil },
-                set: { if !$0 { reminderBedtime = nil } }
-            ),
+            isPresented: $showReminderDialog,
             titleVisibility: .visible
         ) {
             Button("Remind Me") {
-                guard let bedtime = reminderBedtime else { return }
+                let bedtime = reminderBedtime
                 reminderBedtime = nil
-                Task { await countdownManager.start(bedtime: bedtime) }
-                alarmResultMessage = "Alarm set. Bedtime reminder active."
+                if let bedtime {
+                    Task { await countdownManager.start(bedtime: bedtime) }
+                    alarmResultMessage = "Alarm set. Bedtime reminder active."
+                } else {
+                    alarmResultMessage = "Alarm set"
+                }
             }
             Button("Skip", role: .cancel) {
                 reminderBedtime = nil

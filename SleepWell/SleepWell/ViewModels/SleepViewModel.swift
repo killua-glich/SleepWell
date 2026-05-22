@@ -58,7 +58,9 @@ final class SleepViewModel {
         var components = Calendar.current.dateComponents([.year, .month, .day], from: Date())
         components.hour = hour
         components.minute = minute
-        return Calendar.current.date(from: components) ?? Date()
+        let date = Calendar.current.date(from: components) ?? Date()
+        // If this time has already passed today, use tomorrow
+        return date > Date() ? date : Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date
     }
 
     func calculate() {
