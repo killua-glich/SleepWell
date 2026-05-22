@@ -102,9 +102,13 @@ struct BedtimeCountdownLiveActivity: Widget {
 
     // MARK: - Helpers
 
+    private static let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        return formatter
+    }()
+
     private func shortTimeString(_ date: Date) -> String {
-        let f = DateFormatter()
-        f.timeStyle = .short
-        return f.string(from: date)
+        Self.timeFormatter.string(from: date)
     }
 }
