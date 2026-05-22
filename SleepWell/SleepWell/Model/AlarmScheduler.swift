@@ -16,6 +16,12 @@ enum AlarmResult {
 
 @MainActor
 final class AlarmScheduler {
+    let store: ScheduledAlarmStore
+
+    init(store: ScheduledAlarmStore = ScheduledAlarmStore()) {
+        self.store = store
+    }
+
     func schedule(at date: Date, label: String = "Time to wake up") async -> AlarmResult {
         logger.info("schedule() called for date: \(date)")
 
@@ -39,6 +45,7 @@ final class AlarmScheduler {
             return .failed(error)
         }
 
+        let alarmID = UUID()
         let alert = AlarmPresentation.Alert(title: LocalizedStringResource(stringLiteral: label))
         let presentation = AlarmPresentation(alert: alert)
         let attributes = AlarmAttributes<SleepAlarmMetadata>(
@@ -52,13 +59,29 @@ final class AlarmScheduler {
 
         do {
             logger.info("Scheduling alarm at \(date)")
-            let alarm = try await manager.schedule(id: UUID(), configuration: config)
+            let alarm = try await manager.schedule(id: alarmID, configuration: config)
             let allAlarms = (try? manager.alarms) ?? []
-            logger.info("Alarm scheduled successfully. ID: \(alarm.id). Total AlarmKit alarms stored: \(allAlarms.count)")
+            logger.info("Alarm scheduled. ID: \(alarm.id). Total: \(allAlarms.count)")
+            store.add(ScheduledAlarm(id: alarmID, date: date, label: label))
             return .scheduled
         } catch {
             logger.error("schedule() threw: \(error)")
             return .failed(error)
         }
+    }
+
+    func cancel(id: UUID) async {
+        guard #available(iOS 26, *) else { return }
+        try? await AlarmManager.shared.cancel(id: id)
+        store.remove(id: id)
+    }
+
+    func cancelAll() async {
+        guard #available(iOS 26, *) else { return }
+        let alarms = (try? AlarmManager.shared.alarms) ?? []
+        for alarm in alarms {
+            try? await AlarmManager.shared.cancel(id: alarm.id)
+        }
+        store.removeAll()
     }
 }
