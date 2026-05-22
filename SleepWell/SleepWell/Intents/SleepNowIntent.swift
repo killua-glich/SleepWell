@@ -39,7 +39,7 @@ struct SleepNowIntent: AppIntent {
             return .result(dialog: "I couldn't set the alarm — please open SleepWell to grant permission.")
         case .unsupportedOS:
             return .result(dialog: "Setting alarms requires iOS 26 or later.")
-        case .failed:
+        case .failed(_):
             return .result(dialog: "Something went wrong setting the alarm.")
         }
     }
