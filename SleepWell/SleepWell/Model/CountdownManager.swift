@@ -53,7 +53,7 @@ final class CountdownManager {
         guard !isActive else { return }
         isActive = true
         targetBedtime = bedtime
-        UserDefaults.appGroup.set(bedtime, forKey: Self.bedtimeKey)
+        // No UserDefaults persistence — test entry point only, avoids cross-test state pollution
     }
 
     // MARK: - Private
